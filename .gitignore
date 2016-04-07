@@ -1,3 +1,5 @@
+*.csv
+hibernate.cfg.xml
 *.pdf
 
 *.class
