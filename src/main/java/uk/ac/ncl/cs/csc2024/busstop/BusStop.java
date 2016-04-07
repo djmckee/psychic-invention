@@ -31,14 +31,40 @@ import java.util.Set;
  * BusStop records.
  *
  * @author hugofirth
+ * @author Modified by Dylan McKee
+ *
  */
+
 @Entity
 @NamedQueries({
         @NamedQuery(name = BusStop.SELECT_ALL, query = "select b from BusStop b order by b.id asc")
 })
+
 @Table(name = "bus_stop")
 public class BusStop {
 
     public static final String SELECT_ALL = "BusStop.selectAll";
-    
+
+    @Id
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "description")
+    private String description;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

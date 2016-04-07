@@ -24,21 +24,95 @@ import uk.ac.ncl.cs.csc2024.operator.Operator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Hibernate Operator Entity
+ * Hibernate Route Entity
  *
  * Task: Create fields, methods and annotations which implicitly define an appropriate database table schema for
- * Operator records.
+ * Route records.
  *
  * @author hugofirth
+ * @author Modified by Dylan McKee
+ *
  */
 @Entity
 @NamedQueries({
         @NamedQuery(name = Route.SELECT_ALL, query = "select r from Route r order by r.number asc")
 })
+
 @Table(name = "route")
 public class Route {
     public static final String SELECT_ALL = "Route.selectAll";
+
+    @Id
+    @Column(name = "number")
+    // Using a String type for a variable called 'number' seems extremely counter-intuitive, but the fact that
+    // '16A' is in the sample data set as a 'route number' leaves me with no choice. Ugh. :-(
+    private String routeNumber;
+
+    @Column(name = "frequency")
+    private int frequency;
+
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "start_stop_id")
+    private BusStop startStop;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "start_stop_id")
+    private BusStop destinationStop;
+
+    @ManyToMany(
+            targetEntity=Operator.class,
+            cascade={CascadeType.REMOVE, CascadeType.REMOVE}
+    )
+    @JoinTable(
+            name="operator_route",
+            joinColumns=@JoinColumn(name="operator_id"),
+            inverseJoinColumns=@JoinColumn(name="route_id")
+    )
+    private Set<Operator> operators = new HashSet<Operator>();
+
+    public String getRouteNumber() {
+        return routeNumber;
+    }
+
+    public void setRouteNumber(String routeNumber) {
+        this.routeNumber = routeNumber;
+    }
+
+    public int getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(int frequency) {
+        this.frequency = frequency;
+    }
+
+    public BusStop getStartStop() {
+        return startStop;
+    }
+
+    public void setStartStop(BusStop startStop) {
+        this.startStop = startStop;
+    }
+
+    public BusStop getDestinationStop() {
+        return destinationStop;
+    }
+
+    public void setDestinationStop(BusStop destinationStop) {
+        this.destinationStop = destinationStop;
+    }
+
+    public Set<Operator> getOperators() {
+        return operators;
+    }
+
+    public void setOperators(Set<Operator> operators) {
+        this.operators = operators;
+    }
+
 }
