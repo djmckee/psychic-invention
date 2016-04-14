@@ -52,8 +52,6 @@ import java.util.Map;
 public class OperatorQueries {
 
     public static Session insert(final Map<String, String> row, Session session) {
-        session.beginTransaction();
-
         Operator operator = new Operator();
 
         // Operator fields are all String types so no need to perform any parsing.

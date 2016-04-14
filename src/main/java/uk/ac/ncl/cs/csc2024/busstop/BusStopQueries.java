@@ -22,6 +22,7 @@ package uk.ac.ncl.cs.csc2024.busstop;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Query;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.type.IntegerType;
 import uk.ac.ncl.cs.csc2024.query.ExampleQuery;
@@ -46,8 +47,8 @@ import java.util.Map;
 public class BusStopQueries {
 
     public static Session insert(final Map<String, String> row, final Session session) {
-        session.beginTransaction();
 
+        // Create our new bus stop instance
         BusStop busStop = new BusStop();
 
         // Parse the ID from a String in the map to an integer...
@@ -55,9 +56,8 @@ public class BusStopQueries {
         busStop.setId(busStopId);
 
         busStop.setDescription(row.get("description"));
-        session.save(busStop);
 
-        session.getTransaction().commit();
+        session.save(busStop);
 
         return session;
     }

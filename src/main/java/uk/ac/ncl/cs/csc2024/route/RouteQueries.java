@@ -51,8 +51,6 @@ import java.util.*;
 public class RouteQueries {
 
     public static Session insert(final Map<String, String> row, final Session session) {
-        session.beginTransaction();
-
         Route route = new Route();
 
         // Weirdly enough, route 'number' is actually a string :-/, so don't bother parsing it.
@@ -103,8 +101,6 @@ public class RouteQueries {
         route.setOperators(operators);
 
         session.save(route);
-
-        session.getTransaction().commit();
 
         return session;
 
