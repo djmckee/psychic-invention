@@ -32,9 +32,7 @@ import uk.ac.ncl.cs.csc2024.busstop.BusStop;
 import uk.ac.ncl.cs.csc2024.operator.Operator;
 import uk.ac.ncl.cs.csc2024.query.ExampleQuery;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Collection of Queries relating to Route entities
@@ -53,6 +51,100 @@ import java.util.Set;
 public class RouteQueries {
 
     public static Session insert(final Map<String, String> row, final Session session) {
+        session.beginTransaction();
+
+        Route route = new Route();
+
+        // Weirdly enough, route 'number' is actually a string :-/, so don't bother parsing it.
+        route.setNumber(row.get("number"));
+
+
+        // Parse integers from the Map...
+        int frequency = Integer.parseInt(row.get("frequency"));
+        int startStopId = Integer.parseInt(row.get("start_stop_id"));
+        int destinationStopId = Integer.parseInt(row.get("destination_stop_id"));
+
+        route.setFrequency(frequency);
+
+
+        // Now instantiate stops from stop ID numbers and attach them to the route...
+
+        // Look for the start stop...
+        BusStop startStop = findBusStopWithID(session, startStopId);
+        route.setStartStop(startStop);
+
+        // Find the destination stop...
+        BusStop destinationStop = findBusStopWithID(session, destinationStopId);
+        route.setDestinationStop(destinationStop);
+
+        String encodedOperatorStrings = row.get("operator_names");
+
+        // A placeholder array to hold the route's potentially multiple operators in...
+        Set<Operator> operators = new HashSet<Operator>();
+
+        // Parse the '|' separated string of operators, if there's more than one...
+        if (encodedOperatorStrings.contains("|")) {
+            // Continue with parse by splitting on | char
+            String[] encodedNamesSplit = encodedOperatorStrings.split("|");
+
+            // Add them all to the list...
+            for (String operatorName : encodedNamesSplit) {
+                // Instantiate Operator from name; add to operators array
+                Operator operator = findOperatorByName(session, operatorName);
+                operators.add(operator);
+            }
+        } else {
+            // Single operator; no parse necessary - just add the 1 operator name to the array and continue
+            // Instantiate Operator from name; add to operators array
+            Operator operator = findOperatorByName(session, encodedOperatorStrings);
+            operators.add(operator);
+        }
+
+        route.setOperators(operators);
+
+        session.save(route);
+
+        session.getTransaction().commit();
+
+        return session;
+
+    }
+
+    private static Operator findOperatorByName(Session session, String name) {
+        // Look for the operator with the name we've been passed...
+        Query operatorQuery = session.createQuery("select o from Operator o where o.name='" + name + "'");
+        List<Operator> operatorResults = (List<Operator>) operatorQuery.list();
+
+        // There should only be 1 match with that name...
+        for (Operator operator : operatorResults) {
+            // Sanity check
+            if (operator.getName().equals(name)) {
+                // It's definitely the desired operator because the name matches - return it.
+                return operator;
+
+            }
+        }
+
+        // Something went wrong. Null pointer exception waiting to happen...
+        return null;
+
+    }
+
+    private static BusStop findBusStopWithID(Session session, int id) {
+        Query sessionQuery = session.createQuery("select s from BusStop s where s.id=" + id);
+        List<BusStop> stops= (List<BusStop>) sessionQuery.list();
+
+        // There should only be 1 match with that ID...
+        for (BusStop stop : stops) {
+            // Sanity check
+            if (stop.getId() == id) {
+                // It's definitely the desired stop because the IDs match...
+                // We've found a match; return it and terminate the loop.
+                return stop;
+            }
+        }
+
+        // Something went wrong. Null pointer exception waiting to happen...
         return null;
     }
 

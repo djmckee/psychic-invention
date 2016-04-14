@@ -3,6 +3,9 @@ lib
 hibernate.cfg.xml
 *.pdf
 
+*.xml
+
+
 *.class
 
 # Mobile Tools for Java (J2ME)

@@ -23,6 +23,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Query;
 import org.hibernate.criterion.Order;
+import org.hibernate.type.IntegerType;
 import uk.ac.ncl.cs.csc2024.query.ExampleQuery;
 
 import java.util.Map;
@@ -45,7 +46,20 @@ import java.util.Map;
 public class BusStopQueries {
 
     public static Session insert(final Map<String, String> row, final Session session) {
-        return null;
+        session.beginTransaction();
+
+        BusStop busStop = new BusStop();
+
+        // Parse the ID from a String in the map to an integer...
+        int busStopId = Integer.parseInt(row.get("id"));
+        busStop.setId(busStopId);
+
+        busStop.setDescription(row.get("description"));
+        session.save(busStop);
+
+        session.getTransaction().commit();
+
+        return session;
     }
 
     public static ExampleQuery selectAll() {
@@ -73,17 +87,24 @@ public class BusStopQueries {
         return new ExampleQuery() {
             @Override
             public Query getQuery(Session session) {
-                return null;
+                return session.createQuery("select max(id) from BusStop");
             }
 
             @Override
             public String getNamedQueryName() {
-                return null;
+                return BusStop.SELECT_MAX_ID;
             }
 
             @Override
             public Criteria getCriteria(Session session) {
-                return null;
+                // TODO: Check this over!!!
+                Criteria criteria = session.createCriteria(BusStop.class, "b");
+
+                // To get the maximum, order in descending order, and select the first thing...
+                criteria.addOrder(Order.desc("b.id"));
+                criteria.setFetchSize(1);
+
+                return criteria;
             }
         };
     }

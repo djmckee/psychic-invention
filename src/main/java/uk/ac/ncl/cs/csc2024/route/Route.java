@@ -23,7 +23,6 @@ import uk.ac.ncl.cs.csc2024.busstop.BusStop;
 import uk.ac.ncl.cs.csc2024.operator.Operator;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -50,18 +49,18 @@ public class Route {
     @Column(name = "number")
     // Using a String type for a variable called 'number' seems extremely counter-intuitive, but the fact that
     // '16A' is in the sample data set as a 'route number' leaves me with no choice. Ugh. :-(
-    private String routeNumber;
+    private String number;
 
     @Column(name = "frequency")
     private int frequency;
 
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "start_stop_id")
+    @OneToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "start_stop_id", insertable=false, updatable=false)
     private BusStop startStop;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "start_stop_id")
+    @OneToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "start_stop_id", insertable=false, updatable=false)
     private BusStop destinationStop;
 
     @ManyToMany(
@@ -75,12 +74,12 @@ public class Route {
     )
     private Set<Operator> operators = new HashSet<Operator>();
 
-    public String getRouteNumber() {
-        return routeNumber;
+    public String getNumber() {
+        return number;
     }
 
-    public void setRouteNumber(String routeNumber) {
-        this.routeNumber = routeNumber;
+    public void setNumber(String routeNumber) {
+        this.number = routeNumber;
     }
 
     public int getFrequency() {

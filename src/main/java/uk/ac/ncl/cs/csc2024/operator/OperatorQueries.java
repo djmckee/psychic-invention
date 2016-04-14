@@ -29,6 +29,7 @@ import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
+import uk.ac.ncl.cs.csc2024.busstop.BusStop;
 import uk.ac.ncl.cs.csc2024.query.ExampleQuery;
 import uk.ac.ncl.cs.csc2024.route.Route;
 
@@ -51,7 +52,21 @@ import java.util.Map;
 public class OperatorQueries {
 
     public static Session insert(final Map<String, String> row, Session session) {
-        return null;
+        session.beginTransaction();
+
+        Operator operator = new Operator();
+
+        // Operator fields are all String types so no need to perform any parsing.
+        operator.setName(row.get("name"));
+        operator.setStreet(row.get("street"));
+        operator.setTown(row.get("town"));
+        operator.setPostcode(row.get("postcode"));
+        operator.setEmail(row.get("email"));
+        operator.setPhone(row.get("phone"));
+
+        session.save(operator);
+
+        return session;
     }
 
     public static ExampleQuery selectAll() {

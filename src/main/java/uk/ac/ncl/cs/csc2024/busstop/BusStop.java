@@ -37,13 +37,16 @@ import java.util.Set;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(name = BusStop.SELECT_ALL, query = "select b from BusStop b order by b.id asc")
+        @NamedQuery(name = BusStop.SELECT_ALL, query = "select b from BusStop b order by b.id asc"),
+        @NamedQuery(name = BusStop.SELECT_MAX_ID, query = "select max(id) from BusStop")
+
 })
 
 @Table(name = "bus_stop")
 public class BusStop {
 
     public static final String SELECT_ALL = "BusStop.selectAll";
+    public static final String SELECT_MAX_ID = "BusStop.selectMaxId";
 
     @Id
     @Column(name = "id")

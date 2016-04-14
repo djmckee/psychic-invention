@@ -49,6 +49,7 @@ public class Operator {
     public static final String SELECT_ALL =  "Operator.selectAll";
 
     @Id
+    @GeneratedValue
     @Column(name = "id")
     private int id;
 
@@ -65,7 +66,9 @@ public class Operator {
     private String postcode;
 
     @Column(name = "email")
+
     private String email;
+
 
     @Column(name = "phone")
     private String phone;
@@ -80,6 +83,82 @@ public class Operator {
             inverseJoinColumns=@JoinColumn(name="operator_id")
     )
     private Set<Route> routes = new HashSet<Route>();
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getTown() {
+        return town;
+    }
+
+    public void setTown(String town) {
+        this.town = town;
+    }
+
+    public String getPostcode() {
+        return postcode;
+    }
+
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Set<Route> getRoutes() {
+        return routes;
+    }
+
+    public void setRoutes(Set<Route> routes) {
+        this.routes = routes;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Operator operator = (Operator) o;
+
+        return getId() == operator.getId();
+
+    }
+
+    @Override
+    public int hashCode() {
+        return getId();
+    }
 
 
 }
