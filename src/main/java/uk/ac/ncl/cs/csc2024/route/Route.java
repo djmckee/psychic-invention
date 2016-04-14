@@ -60,7 +60,7 @@ public class Route {
     private BusStop startStop;
 
     @OneToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "start_stop_id", insertable=false, updatable=false)
+    @JoinColumn(name = "destination_stop_id", insertable=false, updatable=false)
     private BusStop destinationStop;
 
     @ManyToMany(
@@ -69,8 +69,8 @@ public class Route {
     )
     @JoinTable(
             name="operator_route",
-            joinColumns=@JoinColumn(name="operator_id"),
-            inverseJoinColumns=@JoinColumn(name="route_id")
+            joinColumns=@JoinColumn(name="route_id"),
+            inverseJoinColumns=@JoinColumn(name="operator_id")
     )
     private Set<Operator> operators = new HashSet<Operator>();
 

@@ -32,6 +32,7 @@ import uk.ac.ncl.cs.csc2024.busstop.BusStop;
 import uk.ac.ncl.cs.csc2024.operator.Operator;
 import uk.ac.ncl.cs.csc2024.query.ExampleQuery;
 
+import java.sql.PreparedStatement;
 import java.util.*;
 
 /**
@@ -56,11 +57,16 @@ public class RouteQueries {
         // Weirdly enough, route 'number' is actually a string :-/, so don't bother parsing it.
         route.setNumber(row.get("number"));
 
+        String encodedOperatorStrings = row.get("operators");
+
+        Set<Operator> operators = parseOperatorsFromEncodedString(session, encodedOperatorStrings);
+
+        route.setOperators(operators);
 
         // Parse integers from the Map...
         int frequency = Integer.parseInt(row.get("frequency"));
-        int startStopId = Integer.parseInt(row.get("start_stop_id"));
-        int destinationStopId = Integer.parseInt(row.get("destination_stop_id"));
+        int startStopId = Integer.parseInt(row.get("start"));
+        int destinationStopId = Integer.parseInt(row.get("destination"));
 
         route.setFrequency(frequency);
 
@@ -75,15 +81,20 @@ public class RouteQueries {
         BusStop destinationStop = findBusStopWithID(session, destinationStopId);
         route.setDestinationStop(destinationStop);
 
-        String encodedOperatorStrings = row.get("operator_names");
+        session.save(route);
 
+        return session;
+
+    }
+
+    private static Set<Operator> parseOperatorsFromEncodedString(Session session, String encodedOperatorStrings) {
         // A placeholder array to hold the route's potentially multiple operators in...
         Set<Operator> operators = new HashSet<Operator>();
 
         // Parse the '|' separated string of operators, if there's more than one...
         if (encodedOperatorStrings.contains("|")) {
             // Continue with parse by splitting on | char
-            String[] encodedNamesSplit = encodedOperatorStrings.split("|");
+            String[] encodedNamesSplit = encodedOperatorStrings.split("\\|");
 
             // Add them all to the list...
             for (String operatorName : encodedNamesSplit) {
@@ -98,17 +109,14 @@ public class RouteQueries {
             operators.add(operator);
         }
 
-        route.setOperators(operators);
-
-        session.save(route);
-
-        return session;
-
+        return operators;
     }
 
     private static Operator findOperatorByName(Session session, String name) {
         // Look for the operator with the name we've been passed...
-        Query operatorQuery = session.createQuery("select o from Operator o where o.name='" + name + "'");
+        Query operatorQuery = session.createQuery("select o from Operator o where o.name=:name");
+        operatorQuery.setString("name", name);
+
         List<Operator> operatorResults = (List<Operator>) operatorQuery.list();
 
         // There should only be 1 match with that name...
@@ -127,7 +135,9 @@ public class RouteQueries {
     }
 
     private static BusStop findBusStopWithID(Session session, int id) {
-        Query sessionQuery = session.createQuery("select s from BusStop s where s.id=" + id);
+        Query sessionQuery = session.createQuery("select s from BusStop s where s.id=:id");
+        sessionQuery.setInteger("id", id);
+
         List<BusStop> stops= (List<BusStop>) sessionQuery.list();
 
         // There should only be 1 match with that ID...

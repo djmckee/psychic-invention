@@ -79,8 +79,8 @@ public class Operator {
     )
     @JoinTable(
             name="operator_route",
-            joinColumns=@JoinColumn(name="route_id"),
-            inverseJoinColumns=@JoinColumn(name="operator_id")
+            joinColumns=@JoinColumn(name="operator_id"),
+            inverseJoinColumns=@JoinColumn(name="route_id")
     )
     private Set<Route> routes = new HashSet<Route>();
 
