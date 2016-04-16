@@ -40,7 +40,7 @@ import java.util.Set;
 @NamedQueries({
         @NamedQuery(name = Route.SELECT_ALL, query = "select r from Route r order by r.number asc"),
         @NamedQuery(name = Route.SELECT_ALL_FOR_RAILWAY_STATION, query = "select distinct r from Route r where r.startStop.id =  9015 OR r.startStop.id = 9016 OR r.destinationStop.id = 9015 OR r.destinationStop.id = 9016"),
-        @NamedQuery(name = Route.CUMULATIVE_FREQUENCY_BY_OK_TRAVEL, query = "select r from Route r where :operator in r.operators")
+        @NamedQuery(name = Route.CUMULATIVE_FREQUENCY_BY_OK_TRAVEL, query = "select sum (r.frequency * 0.5) from Route r where :operator in r.operators")
 })
 
 @Table(name = "route")

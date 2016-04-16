@@ -23,7 +23,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Query;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Order;
+import org.hibernate.criterion.*;
 import org.hibernate.type.IntegerType;
 import uk.ac.ncl.cs.csc2024.query.ExampleQuery;
 
@@ -87,7 +87,7 @@ public class BusStopQueries {
         return new ExampleQuery() {
             @Override
             public Query getQuery(Session session) {
-                return session.createQuery("select max(id) from BusStop");
+                return session.createQuery("select b from BusStop b where b.id = (select max(id) from BusStop)");
             }
 
             @Override
@@ -97,12 +97,11 @@ public class BusStopQueries {
 
             @Override
             public Criteria getCriteria(Session session) {
-                // TODO: Check this over!!!
                 Criteria criteria = session.createCriteria(BusStop.class, "b");
 
-                // To get the maximum, order in descending order, and select the first thing...
-                criteria.addOrder(Order.desc("b.id"));
-                criteria.setFetchSize(1);
+                criteria.setMaxResults(1);
+
+                criteria.addOrder(Order.desc("id"));
 
                 return criteria;
             }

@@ -40,13 +40,18 @@ import java.util.Set;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(name = Operator.SELECT_ALL, query = "select o from Operator o order by o.name asc")
+        @NamedQuery(name = Operator.SELECT_ALL, query = "select o from Operator o order by o.name asc"),
+        @NamedQuery(name = Operator.SELECT_ALL_DIAMOND_BUSES_ROUTES, query = "select o from Operator o order by o.name asc"),
+        @NamedQuery(name = Operator.SELECT_ALL_PARK_GATES_OPERATORS, query =  "select o from Operator o order by o.name asc")
+
 })
 
 @Table(name = "operator")
 public class Operator {
 
     public static final String SELECT_ALL =  "Operator.selectAll";
+    public static final String SELECT_ALL_DIAMOND_BUSES_ROUTES =  "Operator.selectAllRoutesByDiamondBuses";
+    public static final String SELECT_ALL_PARK_GATES_OPERATORS =  "Operator.selectAllForParkGates";
 
     @Id
     @GeneratedValue
