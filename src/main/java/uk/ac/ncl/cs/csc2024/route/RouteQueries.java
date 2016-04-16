@@ -24,6 +24,7 @@ import org.hibernate.Session;
 import org.hibernate.Query;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
 import org.hibernate.type.IntegerType;
@@ -180,17 +181,31 @@ public class RouteQueries {
         return new ExampleQuery() {
             @Override
             public Query getQuery(Session session) {
-                return null;
+                return session.createQuery("select distinct r from Route r where r.startStop.id =  9015 OR r.startStop.id = 9016 OR r.destinationStop.id = 9015 OR r.destinationStop.id = 9016");
+
             }
 
             @Override
             public String getNamedQueryName() {
-                return null;
+                return Route.SELECT_ALL_FOR_RAILWAY_STATION;
             }
 
             @Override
             public Criteria getCriteria(Session session) {
-                return null;
+                Criteria criteria = session.createCriteria(Route.class, "r");
+                criteria.addOrder(Order.asc("r.number"));
+
+                criteria.add(Restrictions.disjunction().add(
+                        Property.forName("r.startStop.id").eq(9015)
+                ).add(
+                        Property.forName("r.startStop.id").eq(9016)
+                ).add(
+                        Property.forName("r.destinationStop.id").eq(9015)
+                ).add(
+                        Property.forName("r.destinationStop.id").eq(9016)
+                ));
+
+                return criteria;
             }
         };
     }
@@ -204,7 +219,7 @@ public class RouteQueries {
 
             @Override
             public String getNamedQueryName() {
-                return null;
+                return Route.CUMULATIVE_FREQUENCY_BY_OK_TRAVEL;
             }
 
             @Override

@@ -38,12 +38,16 @@ import java.util.Set;
  */
 @Entity
 @NamedQueries({
-        @NamedQuery(name = Route.SELECT_ALL, query = "select r from Route r order by r.number asc")
+        @NamedQuery(name = Route.SELECT_ALL, query = "select r from Route r order by r.number asc"),
+        @NamedQuery(name = Route.SELECT_ALL_FOR_RAILWAY_STATION, query = "select distinct r from Route r where r.startStop.id =  9015 OR r.startStop.id = 9016 OR r.destinationStop.id = 9015 OR r.destinationStop.id = 9016"),
+        @NamedQuery(name = Route.CUMULATIVE_FREQUENCY_BY_OK_TRAVEL, query = "select r from Route r where :operator in r.operators")
 })
 
 @Table(name = "route")
 public class Route {
     public static final String SELECT_ALL = "Route.selectAll";
+    public static final String SELECT_ALL_FOR_RAILWAY_STATION = "Route.selectAllForRailwayStation";
+    public static final String CUMULATIVE_FREQUENCY_BY_OK_TRAVEL = "Route.cumulativeFrequencyByOkTravel";
 
     @Id
     @Column(name = "number")
@@ -56,11 +60,11 @@ public class Route {
 
 
     @OneToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "start_stop_id", insertable=false, updatable=false)
+    @JoinColumn(name = "start_stop_id")
     private BusStop startStop;
 
     @OneToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "destination_stop_id", insertable=false, updatable=false)
+    @JoinColumn(name = "destination_stop_id")
     private BusStop destinationStop;
 
     @ManyToMany(
