@@ -24,13 +24,11 @@ import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.Query;
 
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projection;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.*;
 import org.hibernate.sql.JoinType;
 import uk.ac.ncl.cs.csc2024.busstop.BusStop;
 import uk.ac.ncl.cs.csc2024.query.ExampleQuery;
+import uk.ac.ncl.cs.csc2024.query.QueryUtilities;
 import uk.ac.ncl.cs.csc2024.route.Route;
 
 import java.util.Map;
@@ -92,17 +90,26 @@ public class OperatorQueries {
         return new ExampleQuery() {
             @Override
             public Query getQuery(Session session) {
-                return null;
+                // I looked up the use of Hibernate joins at https://stackoverflow.com/questions/3475171/hql-hibernate-query-with-manytomany
+                return session.createQuery("select r from Route r join r.operators o where o.name='Diamond Buses'");
             }
 
             @Override
             public String getNamedQueryName() {
-                return null;
+                return Operator.SELECT_ALL_DIAMOND_BUSES_ROUTES;
             }
 
             @Override
             public Criteria getCriteria(Session session) {
-                return null;
+                Criteria criteria = session.createCriteria(Route.class, "r");
+
+                // I looked up the use of createAlias at https://stackoverflow.com/questions/6744941/hibernate-criteria-with-many-to-many-join-table
+                criteria.createAlias("r.operators", "o");
+                criteria.add(Restrictions.eq("o.name", "Diamond Buses"));
+
+
+                return criteria;
+
             }
         };
     }
@@ -111,17 +118,34 @@ public class OperatorQueries {
         return new ExampleQuery() {
             @Override
             public Query getQuery(Session session) {
-                return null;
+                return session.createQuery("select o from Operator o join o.routes r where r.startStop.description='Park Gates' or r.destinationStop.description='Park Gates'");
             }
 
             @Override
             public String getNamedQueryName() {
-                return null;
+                return Operator.SELECT_ALL_PARK_GATES_OPERATORS;
             }
 
             @Override
             public Criteria getCriteria(Session session) {
-                return null;
+                Criteria criteria = session.createCriteria(Operator.class, "o");
+
+                // I looked up the use of createAlias at https://stackoverflow.com/questions/6744941/hibernate-criteria-with-many-to-many-join-table
+                criteria.createAlias("o.routes", "r");
+
+                criteria.createAlias("r.startStop", "startStop");
+                criteria.createAlias("r.destinationStop", "destinationStop");
+
+                // I looked up the disjunction Restriction to perform a logical OR at https://stackoverflow.com/questions/57484/how-do-you-or-criteria-together-when-using-a-criteria-query-with-hibernate
+                criteria.add(Restrictions.disjunction().add(
+                        Restrictions.eq("startStop.description", "Park Gates")
+                ).add(
+                        Restrictions.eq("destinationStop.description", "Park Gates")
+                ));
+
+
+                return criteria;
+
             }
         };
     }

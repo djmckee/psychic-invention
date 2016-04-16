@@ -41,8 +41,8 @@ import java.util.Set;
 @Entity
 @NamedQueries({
         @NamedQuery(name = Operator.SELECT_ALL, query = "select o from Operator o order by o.name asc"),
-        @NamedQuery(name = Operator.SELECT_ALL_DIAMOND_BUSES_ROUTES, query = "select o from Operator o order by o.name asc"),
-        @NamedQuery(name = Operator.SELECT_ALL_PARK_GATES_OPERATORS, query =  "select o from Operator o order by o.name asc")
+        @NamedQuery(name = Operator.SELECT_ALL_DIAMOND_BUSES_ROUTES, query = "select r from Route r join r.operators o where o.name='Diamond Buses'"),
+        @NamedQuery(name = Operator.SELECT_ALL_PARK_GATES_OPERATORS, query =  "select o from Operator o join o.routes r where r.startStop.description='Park Gates' or r.destinationStop.description='Park Gates'")
 
 })
 
