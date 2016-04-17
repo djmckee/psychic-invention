@@ -19,6 +19,7 @@
  */
 package uk.ac.ncl.cs.csc2024.route;
 
+import org.hibernate.annotations.Formula;
 import uk.ac.ncl.cs.csc2024.busstop.BusStop;
 import uk.ac.ncl.cs.csc2024.operator.Operator;
 
@@ -40,7 +41,7 @@ import java.util.Set;
 @NamedQueries({
         @NamedQuery(name = Route.SELECT_ALL, query = "select r from Route r order by r.number asc"),
         @NamedQuery(name = Route.SELECT_ALL_FOR_RAILWAY_STATION, query = "select distinct r from Route r where r.startStop.id =  9015 OR r.startStop.id = 9016 OR r.destinationStop.id = 9015 OR r.destinationStop.id = 9016"),
-        @NamedQuery(name = Route.CUMULATIVE_FREQUENCY_BY_OK_TRAVEL, query = "select sum (r.frequency * 0.5) from Route r where :operator in r.operators")
+        @NamedQuery(name = Route.CUMULATIVE_FREQUENCY_BY_OK_TRAVEL, query = "select sum(r.frequency * 0.75) from Route r join r.operators o where o.name = 'OK Travel'")
 })
 
 @Table(name = "route")
@@ -77,6 +78,10 @@ public class Route {
             inverseJoinColumns=@JoinColumn(name="operator_id")
     )
     private Set<Operator> operators = new HashSet<Operator>();
+
+    // TODO: fix
+    @Formula("frequency * 0.75")
+    private double frequencyPerOperator;
 
     public String getNumber() {
         return number;
@@ -116,6 +121,10 @@ public class Route {
 
     public void setOperators(Set<Operator> operators) {
         this.operators = operators;
+    }
+
+    public double getFrequencyPerOperator() {
+        return frequencyPerOperator;
     }
 
 }

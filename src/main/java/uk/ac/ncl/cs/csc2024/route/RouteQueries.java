@@ -22,10 +22,7 @@ package uk.ac.ncl.cs.csc2024.route;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Query;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Property;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.*;
 import org.hibernate.sql.JoinType;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.Type;
@@ -173,13 +170,8 @@ public class RouteQueries {
         return new ExampleQuery() {
             @Override
             public Query getQuery(Session session) {
-                Query query = session.createQuery("select sum (r.frequency * 0.5) from Route r where :operator in r.operators");
+                return session.createQuery("select sum(r.frequency * 0.75) from Route r join r.operators o where o.name = 'OK Travel'");
 
-                Operator okTravelOperator = QueryUtilities.findOperatorByName(session, "OK Travel");
-
-                query.setEntity("operator", okTravelOperator);
-
-                return query;
             }
 
             @Override
@@ -189,7 +181,16 @@ public class RouteQueries {
 
             @Override
             public Criteria getCriteria(Session session) {
-            	return null;
+                Criteria criteria = session.createCriteria(Route.class, "r");
+
+                // I looked up the use of createAlias at https://stackoverflow.com/questions/6744941/hibernate-criteria-with-many-to-many-join-table
+                criteria.createAlias("r.operators", "o");
+                criteria.add(Restrictions.eq("o.name", "OK Travel"));
+
+
+                criteria.setProjection(Projections.sum("frequencyPerOperator"));
+
+                return criteria;
             }
         };
     }
