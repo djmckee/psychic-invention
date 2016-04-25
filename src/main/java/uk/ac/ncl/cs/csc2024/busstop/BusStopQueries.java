@@ -77,7 +77,8 @@ public class BusStopQueries {
             @Override
             public Criteria getCriteria(Session session) {
                 Criteria criteria = session.createCriteria(BusStop.class, "b");
-                criteria.addOrder(Order.asc("b.id"));
+                Order ascendingOrder = Order.asc("b.id");
+                criteria.addOrder(ascendingOrder);
                 return criteria;
             }
         };
@@ -101,7 +102,8 @@ public class BusStopQueries {
 
                 criteria.setMaxResults(1);
 
-                criteria.addOrder(Order.desc("id"));
+                Order descendingOrder = Order.desc("id");
+                criteria.addOrder(descendingOrder);
 
                 return criteria;
             }

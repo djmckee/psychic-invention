@@ -54,7 +54,8 @@ public class RouteQueries {
         Route route = new Route();
 
         // Weirdly enough, route 'number' is actually a string :-/, so don't bother parsing it.
-        route.setNumber(row.get("number"));
+        String routeNumber = row.get("number");
+        route.setNumber(routeNumber);
 
         String encodedOperatorStrings = row.get("operators");
 
@@ -63,9 +64,12 @@ public class RouteQueries {
         route.setOperators(operators);
 
         // Parse integers from the Map...
-        int frequency = Integer.parseInt(row.get("frequency"));
-        int startStopId = Integer.parseInt(row.get("start"));
-        int destinationStopId = Integer.parseInt(row.get("destination"));
+        String frequencyString = row.get("frequency");
+        int frequency = Integer.parseInt(frequencyString);
+        String startStopIdString = row.get("start");
+        int startStopId = Integer.parseInt(startStopIdString);
+        String destinationStopIdString = row.get("destination");
+        int destinationStopId = Integer.parseInt(destinationStopIdString);
 
         route.setFrequency(frequency);
 
@@ -126,7 +130,8 @@ public class RouteQueries {
             @Override
             public Criteria getCriteria(Session session) {
                 Criteria criteria = session.createCriteria(Route.class, "r");
-                criteria.addOrder(Order.asc("r.number"));
+                Order ascendingOrder = Order.asc("r.number");
+                criteria.addOrder(ascendingOrder);
                 return criteria;
             }
         };
@@ -151,15 +156,18 @@ public class RouteQueries {
                 Criteria criteria = session.createCriteria(Route.class, "r");
                 criteria.addOrder(Order.asc("r.number"));
 
-                criteria.add(Restrictions.disjunction().add(
-                        Property.forName("r.startStop.id").eq(9015)
-                ).add(
-                        Property.forName("r.startStop.id").eq(9016)
-                ).add(
-                        Property.forName("r.destinationStop.id").eq(9015)
-                ).add(
-                        Property.forName("r.destinationStop.id").eq(9016)
-                ));
+                Disjunction logicalOr = Restrictions.disjunction();
+                Criterion stopIdEqualsStop1 = Property.forName("r.startStop.id").eq(9015);
+                Criterion stopIdEqualsStop2 = Property.forName("r.startStop.id").eq(9016);
+                Criterion destinationIdEqualsStop1 = Property.forName("r.destinationStop.id").eq(9015);
+                Criterion destinationIdEqualsStop2 = Property.forName("r.destinationStop.id").eq(9016);
+
+                logicalOr.add(stopIdEqualsStop1);
+                logicalOr.add(stopIdEqualsStop2);
+                logicalOr.add(destinationIdEqualsStop1);
+                logicalOr.add(destinationIdEqualsStop2);
+
+                criteria.add(logicalOr);
 
                 return criteria;
             }
@@ -185,10 +193,11 @@ public class RouteQueries {
 
                 // I looked up the use of createAlias at https://stackoverflow.com/questions/6744941/hibernate-criteria-with-many-to-many-join-table
                 criteria.createAlias("r.operators", "o");
-                criteria.add(Restrictions.eq("o.name", "OK Travel"));
+                SimpleExpression operatorNameEquals = Restrictions.eq("o.name", "OK Travel");
+                criteria.add(operatorNameEquals);
 
-
-                criteria.setProjection(Projections.sum("frequencyPerOperator"));
+                AggregateProjection sumOfOperatorFrequency = Projections.sum("frequencyPerOperator");
+                criteria.setProjection(sumOfOperatorFrequency);
 
                 return criteria;
             }

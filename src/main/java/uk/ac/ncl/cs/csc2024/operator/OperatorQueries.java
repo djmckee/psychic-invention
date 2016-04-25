@@ -53,12 +53,18 @@ public class OperatorQueries {
         Operator operator = new Operator();
 
         // Operator fields are all String types so no need to perform any parsing.
-        operator.setName(row.get("name"));
-        operator.setStreet(row.get("street"));
-        operator.setTown(row.get("town"));
-        operator.setPostcode(row.get("postcode"));
-        operator.setEmail(row.get("email"));
-        operator.setPhone(row.get("phone"));
+        String name = row.get("name");
+        operator.setName(name);
+        String street = row.get("street");
+        operator.setStreet(street);
+        String town = row.get("town");
+        operator.setTown(town);
+        String postcode = row.get("postcode");
+        operator.setPostcode(postcode);
+        String email = row.get("email");
+        operator.setEmail(email);
+        String phone = row.get("phone");
+        operator.setPhone(phone);
 
         session.save(operator);
 
@@ -80,7 +86,8 @@ public class OperatorQueries {
             @Override
             public Criteria getCriteria(Session session) {
                 Criteria criteria = session.createCriteria(Operator.class, "o");
-                criteria.addOrder(Order.asc("o.name"));
+                Order ascendingOrder = Order.asc("o.name");
+                criteria.addOrder(ascendingOrder);
                 return criteria;
             }
         };
@@ -105,7 +112,8 @@ public class OperatorQueries {
 
                 // I looked up the use of createAlias at https://stackoverflow.com/questions/6744941/hibernate-criteria-with-many-to-many-join-table
                 criteria.createAlias("r.operators", "o");
-                criteria.add(Restrictions.eq("o.name", "Diamond Buses"));
+                SimpleExpression operatorNameEquals = Restrictions.eq("o.name", "Diamond Buses");
+                criteria.add(operatorNameEquals);
 
 
                 return criteria;
