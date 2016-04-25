@@ -137,11 +137,13 @@ public class OperatorQueries {
                 criteria.createAlias("r.destinationStop", "destinationStop");
 
                 // I looked up the disjunction Restriction to perform a logical OR at https://stackoverflow.com/questions/57484/how-do-you-or-criteria-together-when-using-a-criteria-query-with-hibernate
-                criteria.add(Restrictions.disjunction().add(
-                        Restrictions.eq("startStop.description", "Park Gates")
-                ).add(
-                        Restrictions.eq("destinationStop.description", "Park Gates")
-                ));
+                Disjunction logicalOr = Restrictions.disjunction();
+                Criterion startStopDescription = Restrictions.eq("startStop.description", "Park Gates");
+                logicalOr.add(startStopDescription);
+                Criterion destinationStopDescription = Restrictions.eq("destinationStop.description", "Park Gates");
+                logicalOr.add(destinationStopDescription);
+
+                criteria.add(logicalOr);
 
 
                 return criteria;
