@@ -1,38 +1,35 @@
 /**
  * csc2024-hibernate-assignment
- *
+ * <p>
  * Copyright (c) 2015 Newcastle University
  * Email: <h.firth@ncl.ac.uk/>
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at:
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 package uk.ac.ncl.cs.csc2024.route;
 
 import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.criterion.*;
-import org.hibernate.sql.JoinType;
-import org.hibernate.type.IntegerType;
-import org.hibernate.type.Type;
 import uk.ac.ncl.cs.csc2024.busstop.BusStop;
 import uk.ac.ncl.cs.csc2024.operator.Operator;
 import uk.ac.ncl.cs.csc2024.query.ExampleQuery;
 import uk.ac.ncl.cs.csc2024.query.QueryUtilities;
 
-import java.sql.PreparedStatement;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Collection of Queries relating to Route entities
@@ -47,10 +44,13 @@ import java.util.*;
  * An example of how this should look is provided in the `selectAll(...)` query.
  *
  * @author hugofirth
+ * @author modified by Dylan McKee
+ *
  */
 public class RouteQueries {
 
-    public static Session insert(final Map<String, String> row, final Session session) {
+
+    public static Session insert(Map<String, String> row, Session session) {
         Route route = new Route();
 
         // Weirdly enough, route 'number' is actually a string :-/, so don't bother parsing it.
@@ -90,6 +90,14 @@ public class RouteQueries {
 
     }
 
+    /**
+     * A convenience method I added to parse the '|' separated String containing the names of the bus operators into a
+     * Set containing the relevant Operator instances.
+     * @author Dylan McKee
+     * @param session the Hibernate session to run the Operator search queries on.
+     * @param encodedOperatorStrings the '|' separated string of operator names to parse.
+     * @return a Set of Operator instances that were encoded within the string passed to this method.
+     */
     private static Set<Operator> parseOperatorsFromEncodedString(Session session, String encodedOperatorStrings) {
         // A placeholder array to hold the route's potentially multiple operators in...
         Set<Operator> operators = new HashSet<Operator>();
@@ -119,7 +127,7 @@ public class RouteQueries {
         return new ExampleQuery() {
             @Override
             public Query getQuery(Session session) {
-                return session.createQuery("select r from Route r order by r.number asc");
+                return session.createQuery(Route.SELECT_ALL_ROUTES_SQL_QUERY);
             }
 
             @Override
@@ -142,7 +150,7 @@ public class RouteQueries {
         return new ExampleQuery() {
             @Override
             public Query getQuery(Session session) {
-                return session.createQuery("select distinct r from Route r where r.startStop.id =  9015 OR r.startStop.id = 9016 OR r.destinationStop.id = 9015 OR r.destinationStop.id = 9016");
+                return session.createQuery(Route.SELECT_RAILWAY_STATION_SQL_QUERY);
 
             }
 
@@ -156,7 +164,11 @@ public class RouteQueries {
                 Criteria criteria = session.createCriteria(Route.class, "r");
                 criteria.addOrder(Order.asc("r.number"));
 
+                // Using a Disjunction to perform a logical OR
+                // I looked up the disjunction Restriction to perform a logical OR at https://stackoverflow.com/questions/57484/how-do-you-or-criteria-together-when-using-a-criteria-query-with-hibernate
                 Disjunction logicalOr = Restrictions.disjunction();
+
+                // The start OR destination stop of the route must equal 9015 OR 9016 to be returned by this query
                 Criterion stopIdEqualsStop1 = Property.forName("r.startStop.id").eq(9015);
                 Criterion stopIdEqualsStop2 = Property.forName("r.startStop.id").eq(9016);
                 Criterion destinationIdEqualsStop1 = Property.forName("r.destinationStop.id").eq(9015);
@@ -178,7 +190,7 @@ public class RouteQueries {
         return new ExampleQuery() {
             @Override
             public Query getQuery(Session session) {
-                return session.createQuery("select sum(r.frequency * 0.75) from Route r join r.operators o where o.name = 'OK Travel'");
+                return session.createQuery(Route.CUMULATIVE_FREQUENCY_SQL_QUERY);
 
             }
 
@@ -193,9 +205,12 @@ public class RouteQueries {
 
                 // I looked up the use of createAlias at https://stackoverflow.com/questions/6744941/hibernate-criteria-with-many-to-many-join-table
                 criteria.createAlias("r.operators", "o");
+
+                // The route operator must equal 'OK Travel' to be included in this query.
                 SimpleExpression operatorNameEquals = Restrictions.eq("o.name", "OK Travel");
                 criteria.add(operatorNameEquals);
 
+                // This query counts up the frequency per operator for each route that is operated by OK Travel.
                 AggregateProjection sumOfOperatorFrequency = Projections.sum("frequencyPerOperator");
                 criteria.setProjection(sumOfOperatorFrequency);
 

@@ -38,7 +38,7 @@ public final class FileUtils {
         List<String> keys = Arrays.asList(lines.poll().split(","));
         if(keys.isEmpty())
         {
-            throw new IllegalArgumentException("The csv at "+csv.toString()+" is of an unrecognised format and could " +
+            throw new IllegalArgumentException("The csv at "+ csv +" is of an unrecognised format and could " +
                     "not be parsed");
         }
         List<Map<String, String>> rows = new LinkedList<>();
@@ -47,7 +47,7 @@ public final class FileUtils {
             List<String> entries = Arrays.asList(lines.poll().split(","));
             if(entries.size() != keys.size())
             {
-                throw new IllegalArgumentException("The csv at "+csv.toString()+" is of an unrecognised format and " +
+                throw new IllegalArgumentException("The csv at "+ csv +" is of an unrecognised format and " +
                         "could not be parsed");
             }
             Map<String, String> row = new HashMap<>();
