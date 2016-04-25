@@ -50,6 +50,21 @@ import java.util.Set;
 public class RouteQueries {
 
 
+    /**
+     * The ID number for Railway Station Bus Stop 1.
+     */
+    public static final int RAILWAY_STATION_STOP_ID_1 = 9015;
+
+    /**
+     * The ID number for Railway Station Bus Stop 2.
+     */
+    public static final int RAILWAY_STATION_STOP_ID_2 = 9016;
+
+    /**
+     * The name of OK Travel for use in the query.
+     */
+    public static final String OK_TRAVEL_OPERATOR_NAME = "OK Travel";
+
     public static Session insert(Map<String, String> row, Session session) {
         Route route = new Route();
 
@@ -169,10 +184,10 @@ public class RouteQueries {
                 Disjunction logicalOr = Restrictions.disjunction();
 
                 // The start OR destination stop of the route must equal 9015 OR 9016 to be returned by this query
-                Criterion stopIdEqualsStop1 = Property.forName("r.startStop.id").eq(9015);
-                Criterion stopIdEqualsStop2 = Property.forName("r.startStop.id").eq(9016);
-                Criterion destinationIdEqualsStop1 = Property.forName("r.destinationStop.id").eq(9015);
-                Criterion destinationIdEqualsStop2 = Property.forName("r.destinationStop.id").eq(9016);
+                Criterion stopIdEqualsStop1 = Property.forName("r.startStop.id").eq(RAILWAY_STATION_STOP_ID_1);
+                Criterion stopIdEqualsStop2 = Property.forName("r.startStop.id").eq(RAILWAY_STATION_STOP_ID_2);
+                Criterion destinationIdEqualsStop1 = Property.forName("r.destinationStop.id").eq(RAILWAY_STATION_STOP_ID_1);
+                Criterion destinationIdEqualsStop2 = Property.forName("r.destinationStop.id").eq(RAILWAY_STATION_STOP_ID_2);
 
                 logicalOr.add(stopIdEqualsStop1);
                 logicalOr.add(stopIdEqualsStop2);
@@ -207,7 +222,7 @@ public class RouteQueries {
                 criteria.createAlias("r.operators", "o");
 
                 // The route operator must equal 'OK Travel' to be included in this query.
-                SimpleExpression operatorNameEquals = Restrictions.eq("o.name", "OK Travel");
+                SimpleExpression operatorNameEquals = Restrictions.eq("o.name", OK_TRAVEL_OPERATOR_NAME);
                 criteria.add(operatorNameEquals);
 
                 // This query counts up the frequency per operator for each route that is operated by OK Travel.

@@ -45,6 +45,16 @@ import java.util.Map;
  */
 public class OperatorQueries {
 
+    /**
+     * The name of the operator 'Diamond Buses'.
+     */
+    public static final String OPERATOR_NAME_DIAMOND_BUSES = "Diamond Buses";
+
+    /**
+     * The description of the Park Gates bus stop.
+     */
+    public static final String BUS_STOP_NAME_PARK_GATES = "Park Gates";
+
     public static Session insert(Map<String, String> row, Session session) {
         Operator operator = new Operator();
 
@@ -110,7 +120,7 @@ public class OperatorQueries {
                 criteria.createAlias("r.operators", "o");
 
                 // An Operator name must equal Diamond Buses for the route to be included in this query.
-                SimpleExpression operatorNameEquals = Restrictions.eq("o.name", "Diamond Buses");
+                SimpleExpression operatorNameEquals = Restrictions.eq("o.name", OPERATOR_NAME_DIAMOND_BUSES);
                 criteria.add(operatorNameEquals);
 
 
@@ -145,9 +155,9 @@ public class OperatorQueries {
 
                 // I looked up the disjunction Restriction to perform a logical OR at https://stackoverflow.com/questions/57484/how-do-you-or-criteria-together-when-using-a-criteria-query-with-hibernate
                 Disjunction logicalOr = Restrictions.disjunction();
-                Criterion startStopDescription = Restrictions.eq("startStop.description", "Park Gates");
+                Criterion startStopDescription = Restrictions.eq("startStop.description", BUS_STOP_NAME_PARK_GATES);
                 logicalOr.add(startStopDescription);
-                Criterion destinationStopDescription = Restrictions.eq("destinationStop.description", "Park Gates");
+                Criterion destinationStopDescription = Restrictions.eq("destinationStop.description", BUS_STOP_NAME_PARK_GATES);
                 logicalOr.add(destinationStopDescription);
 
                 criteria.add(logicalOr);
