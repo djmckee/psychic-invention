@@ -177,7 +177,8 @@ public class RouteQueries {
             @Override
             public Criteria getCriteria(Session session) {
                 Criteria criteria = session.createCriteria(Route.class, "r");
-                criteria.addOrder(Order.asc("r.number"));
+                Order ascendingOrder = Order.asc("r.number");
+                criteria.addOrder(ascendingOrder);
 
                 // Using a Disjunction to perform a logical OR
                 // I looked up the disjunction Restriction to perform a logical OR at https://stackoverflow.com/questions/57484/how-do-you-or-criteria-together-when-using-a-criteria-query-with-hibernate
