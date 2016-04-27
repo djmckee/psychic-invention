@@ -55,7 +55,8 @@ public class BusStopQueries {
         int busStopId = Integer.parseInt(row.get("id"));
         busStop.setId(busStopId);
 
-        busStop.setDescription(row.get("description"));
+        String description = row.get("description");
+        busStop.setDescription(description);
 
         session.save(busStop);
 

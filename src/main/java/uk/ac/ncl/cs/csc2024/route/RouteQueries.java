@@ -149,7 +149,8 @@ public class RouteQueries {
             @Override
             public Criteria getCriteria(Session session) {
                 Criteria criteria = session.createCriteria(Route.class, "r");
-                criteria.addOrder(Order.asc("r.number"));
+                Order ascendingOrder = Order.asc("r.number");
+                criteria.addOrder(ascendingOrder);
 
                 criteria.add(Restrictions.disjunction().add(
                         Property.forName("r.startStop.id").eq(9015)
