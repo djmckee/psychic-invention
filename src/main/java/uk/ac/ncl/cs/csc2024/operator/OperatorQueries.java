@@ -50,6 +50,7 @@ import java.util.Map;
 public class OperatorQueries {
 
     private static final String PARK_GATES_DESCRIPTION = "Park Gates";
+    private static final String DIAMOND_BUSES_NAME = "Diamond Buses";
 
     public static Session insert(final Map<String, String> row, Session session) {
         Operator operator = new Operator();
@@ -120,7 +121,7 @@ public class OperatorQueries {
 
                 // I looked up the use of createAlias at https://stackoverflow.com/questions/6744941/hibernate-criteria-with-many-to-many-join-table
                 criteria.createAlias("r.operators", "o");
-                SimpleExpression nameEqualsConstraint = Restrictions.eq("o.name", "Diamond Buses");
+                SimpleExpression nameEqualsConstraint = Restrictions.eq("o.name", DIAMOND_BUSES_NAME);
                 criteria.add(nameEqualsConstraint);
 
 
