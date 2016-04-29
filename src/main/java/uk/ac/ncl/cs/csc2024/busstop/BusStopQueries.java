@@ -68,7 +68,7 @@ public class BusStopQueries {
         return new ExampleQuery() {
             @Override
             public Query getQuery(Session session) {
-                return session.createQuery("select b from BusStop b order by b.id asc");
+                return session.createQuery(BusStop.SELCT_ALL_HQL_QUERY);
             }
 
             @Override
@@ -90,7 +90,7 @@ public class BusStopQueries {
         return new ExampleQuery() {
             @Override
             public Query getQuery(Session session) {
-                return session.createQuery("select b from BusStop b where b.id = (select max(id) from BusStop)");
+                return session.createQuery(BusStop.SELECT_MAX_ID_HQL_QUERY);
             }
 
             @Override

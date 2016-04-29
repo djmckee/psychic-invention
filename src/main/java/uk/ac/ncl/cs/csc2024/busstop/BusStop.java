@@ -37,8 +37,8 @@ import java.util.Set;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(name = BusStop.SELECT_ALL, query = "select b from BusStop b order by b.id asc"),
-        @NamedQuery(name = BusStop.SELECT_MAX_ID, query = "select b from BusStop b where b.id = (select max(id) from BusStop)")
+        @NamedQuery(name = BusStop.SELECT_ALL, query = BusStop.SELCT_ALL_HQL_QUERY),
+        @NamedQuery(name = BusStop.SELECT_MAX_ID, query = BusStop.SELECT_MAX_ID_HQL_QUERY)
 
 })
 
@@ -47,6 +47,8 @@ public class BusStop {
 
     public static final String SELECT_ALL = "BusStop.selectAll";
     public static final String SELECT_MAX_ID = "BusStop.selectMaxId";
+    public static final String SELECT_MAX_ID_HQL_QUERY = "select b from BusStop b where b.id = (select max(id) from BusStop)";
+    public static final String SELCT_ALL_HQL_QUERY = "select b from BusStop b order by b.id asc";
 
     @Id
     @Column(name = "id")
