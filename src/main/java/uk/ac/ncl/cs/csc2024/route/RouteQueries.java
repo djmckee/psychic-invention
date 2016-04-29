@@ -54,7 +54,8 @@ public class RouteQueries {
         Route route = new Route();
 
         // Weirdly enough, route 'number' is actually a string :-/, so don't bother parsing it.
-        route.setNumber(row.get("number"));
+        String routeNumberString = row.get("number");
+        route.setNumber(routeNumberString);
 
         String encodedOperatorStrings = row.get("operators");
 
@@ -63,9 +64,15 @@ public class RouteQueries {
         route.setOperators(operators);
 
         // Parse integers from the Map...
-        int frequency = Integer.parseInt(row.get("frequency"));
-        int startStopId = Integer.parseInt(row.get("start"));
-        int destinationStopId = Integer.parseInt(row.get("destination"));
+        String frequencyString = row.get("frequency");
+        int frequency = Integer.parseInt(frequencyString);
+
+        String startStopIdNumberString = row.get("start");
+        int startStopId = Integer.parseInt(startStopIdNumberString);
+
+
+        String destinationStopIdNumberString = row.get("destination");
+        int destinationStopId = Integer.parseInt(destinationStopIdNumberString);
 
         route.setFrequency(frequency);
 
