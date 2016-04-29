@@ -133,7 +133,8 @@ public class RouteQueries {
             @Override
             public Criteria getCriteria(Session session) {
                 Criteria criteria = session.createCriteria(Route.class, "r");
-                criteria.addOrder(Order.asc("r.number"));
+                Order ascendingOrder = Order.asc("r.number");
+                criteria.addOrder(ascendingOrder);
                 return criteria;
             }
         };
@@ -159,15 +160,18 @@ public class RouteQueries {
                 Order ascendingOrder = Order.asc("r.number");
                 criteria.addOrder(ascendingOrder);
 
-                criteria.add(Restrictions.disjunction().add(
-                        Property.forName("r.startStop.id").eq(9015)
-                ).add(
-                        Property.forName("r.startStop.id").eq(9016)
-                ).add(
-                        Property.forName("r.destinationStop.id").eq(9015)
-                ).add(
-                        Property.forName("r.destinationStop.id").eq(9016)
-                ));
+                Disjunction logicalOr = Restrictions.disjunction();
+                Criterion startStopId1 = Property.forName("r.startStop.id").eq(9015);
+                Criterion startStopId2 = Property.forName("r.startStop.id").eq(9016);
+                Criterion destinationStopId1 = Property.forName("r.destinationStop.id").eq(9015);
+                Criterion destinationStopId2 = Property.forName("r.destinationStop.id").eq(9016);
+
+                logicalOr.add(startStopId1);
+                logicalOr.add(startStopId2);
+                logicalOr.add(destinationStopId1);
+                logicalOr.add(destinationStopId2);
+
+                criteria.add(logicalOr);
 
                 return criteria;
             }
