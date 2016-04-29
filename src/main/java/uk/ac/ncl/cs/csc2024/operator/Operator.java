@@ -40,9 +40,9 @@ import java.util.Set;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(name = Operator.SELECT_ALL, query = "select o from Operator o order by o.name asc"),
-        @NamedQuery(name = Operator.SELECT_ALL_DIAMOND_BUSES_ROUTES, query = "select r from Route r join r.operators o where o.name='Diamond Buses'"),
-        @NamedQuery(name = Operator.SELECT_ALL_PARK_GATES_OPERATORS, query =  "select o from Operator o join o.routes r where r.startStop.description='Park Gates' or r.destinationStop.description='Park Gates'")
+        @NamedQuery(name = Operator.SELECT_ALL, query = Operator.SELECT_ALL_HQL_QUERY),
+        @NamedQuery(name = Operator.SELECT_ALL_DIAMOND_BUSES_ROUTES, query = Operator.SELECT_DIAMOND_BUSES_ROUTES_HQL_QUERY),
+        @NamedQuery(name = Operator.SELECT_ALL_PARK_GATES_OPERATORS, query = Operator.SELECT_ALL_PARK_GATE_OPERATORS_HQL_QUERY)
 
 })
 
@@ -52,6 +52,9 @@ public class Operator {
     public static final String SELECT_ALL =  "Operator.selectAll";
     public static final String SELECT_ALL_DIAMOND_BUSES_ROUTES =  "Operator.selectAllRoutesByDiamondBuses";
     public static final String SELECT_ALL_PARK_GATES_OPERATORS =  "Operator.selectAllForParkGates";
+    public static final String SELECT_ALL_HQL_QUERY = "select o from Operator o order by o.name asc";
+    public static final String SELECT_DIAMOND_BUSES_ROUTES_HQL_QUERY = "select r from Route r join r.operators o where o.name='Diamond Buses'";
+    public static final String SELECT_ALL_PARK_GATE_OPERATORS_HQL_QUERY = "select o from Operator o join o.routes r where r.startStop.description='Park Gates' or r.destinationStop.description='Park Gates'";
 
     @Id
     @GeneratedValue

@@ -84,7 +84,7 @@ public class OperatorQueries {
         return new ExampleQuery() {
             @Override
             public Query getQuery(Session session) {
-                return session.createQuery("select o from Operator o order by o.name asc");
+                return session.createQuery(Operator.SELECT_ALL_HQL_QUERY);
             }
 
             @Override
@@ -107,7 +107,7 @@ public class OperatorQueries {
             @Override
             public Query getQuery(Session session) {
                 // I looked up the use of Hibernate joins at https://stackoverflow.com/questions/3475171/hql-hibernate-query-with-manytomany
-                return session.createQuery("select r from Route r join r.operators o where o.name='Diamond Buses'");
+                return session.createQuery(Operator.SELECT_DIAMOND_BUSES_ROUTES_HQL_QUERY);
             }
 
             @Override
@@ -135,7 +135,7 @@ public class OperatorQueries {
         return new ExampleQuery() {
             @Override
             public Query getQuery(Session session) {
-                return session.createQuery("select o from Operator o join o.routes r where r.startStop.description='Park Gates' or r.destinationStop.description='Park Gates'");
+                return session.createQuery(Operator.SELECT_ALL_PARK_GATE_OPERATORS_HQL_QUERY);
             }
 
             @Override
