@@ -52,7 +52,8 @@ public class BusStopQueries {
         BusStop busStop = new BusStop();
 
         // Parse the ID from a String in the map to an integer...
-        int busStopId = Integer.parseInt(row.get("id"));
+        String idString = row.get("id");
+        int busStopId = Integer.parseInt(idString);
         busStop.setId(busStopId);
 
         String description = row.get("description");
@@ -78,7 +79,8 @@ public class BusStopQueries {
             @Override
             public Criteria getCriteria(Session session) {
                 Criteria criteria = session.createCriteria(BusStop.class, "b");
-                criteria.addOrder(Order.asc("b.id"));
+                Order ascendingOrder = Order.asc("b.id");
+                criteria.addOrder(ascendingOrder);
                 return criteria;
             }
         };
@@ -102,7 +104,8 @@ public class BusStopQueries {
 
                 criteria.setMaxResults(1);
 
-                criteria.addOrder(Order.desc("id"));
+                Order descendingOrder = Order.desc("id");
+                criteria.addOrder(descendingOrder);
 
                 return criteria;
             }
