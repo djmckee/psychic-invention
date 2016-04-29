@@ -52,6 +52,7 @@ public class RouteQueries {
 
     private static final int RAILWAY_STATION_STOP_ID_1 = 9015;
     private static final int RAILWAY_STATION_STOP_ID_2 = 9016;
+    private static final String OK_TRAVEL_NAME = "OK Travel";
 
     public static Session insert(final Map<String, String> row, final Session session) {
         Route route = new Route();
@@ -164,7 +165,7 @@ public class RouteQueries {
                 criteria.addOrder(ascendingOrder);
 
                 Disjunction logicalOr = Restrictions.disjunction();
-                
+
                 final String startStopIdProperty = "r.startStop.id";
                 final String destinationStopIdProperty = "r.destinationStop.id";
 
@@ -204,7 +205,7 @@ public class RouteQueries {
 
                 // I looked up the use of createAlias at https://stackoverflow.com/questions/6744941/hibernate-criteria-with-many-to-many-join-table
                 criteria.createAlias("r.operators", "o");
-                criteria.add(Restrictions.eq("o.name", "OK Travel"));
+                criteria.add(Restrictions.eq("o.name", OK_TRAVEL_NAME));
 
 
                 criteria.setProjection(Projections.sum("frequencyPerOperator"));
