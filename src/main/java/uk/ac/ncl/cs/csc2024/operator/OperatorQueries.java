@@ -49,6 +49,8 @@ import java.util.Map;
  */
 public class OperatorQueries {
 
+    private static final String PARK_GATES_DESCRIPTION = "Park Gates";
+
     public static Session insert(final Map<String, String> row, Session session) {
         Operator operator = new Operator();
 
@@ -151,11 +153,16 @@ public class OperatorQueries {
                 criteria.createAlias("r.destinationStop", "destinationStop");
 
                 // I looked up the disjunction Restriction to perform a logical OR at https://stackoverflow.com/questions/57484/how-do-you-or-criteria-together-when-using-a-criteria-query-with-hibernate
-                criteria.add(Restrictions.disjunction().add(
-                        Restrictions.eq("startStop.description", "Park Gates")
-                ).add(
-                        Restrictions.eq("destinationStop.description", "Park Gates")
-                ));
+                Disjunction logicalOrOperation = Restrictions.disjunction();
+
+                // Either the start stop or destination stop's name must equal 'Park Gates'
+                SimpleExpression startStopNameConstraint = Restrictions.eq("startStop.description", PARK_GATES_DESCRIPTION);
+                SimpleExpression destinationStopNameConstraint = Restrictions.eq("destinationStop.description", PARK_GATES_DESCRIPTION);
+
+                logicalOrOperation.add(startStopNameConstraint);
+                logicalOrOperation.add(destinationStopNameConstraint);
+
+                criteria.add(logicalOrOperation);
 
 
                 return criteria;
