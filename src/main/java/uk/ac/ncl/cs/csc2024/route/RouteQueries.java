@@ -50,6 +50,9 @@ import java.util.*;
  */
 public class RouteQueries {
 
+    private static final int RAILWAY_STATION_STOP_ID_1 = 9015;
+    private static final int RAILWAY_STATION_STOP_ID_2 = 9016;
+
     public static Session insert(final Map<String, String> row, final Session session) {
         Route route = new Route();
 
@@ -161,10 +164,14 @@ public class RouteQueries {
                 criteria.addOrder(ascendingOrder);
 
                 Disjunction logicalOr = Restrictions.disjunction();
-                Criterion startStopId1 = Property.forName("r.startStop.id").eq(9015);
-                Criterion startStopId2 = Property.forName("r.startStop.id").eq(9016);
-                Criterion destinationStopId1 = Property.forName("r.destinationStop.id").eq(9015);
-                Criterion destinationStopId2 = Property.forName("r.destinationStop.id").eq(9016);
+                
+                final String startStopIdProperty = "r.startStop.id";
+                final String destinationStopIdProperty = "r.destinationStop.id";
+
+                Criterion startStopId1 = Property.forName(startStopIdProperty).eq(RAILWAY_STATION_STOP_ID_1);
+                Criterion startStopId2 = Property.forName(startStopIdProperty).eq(RAILWAY_STATION_STOP_ID_2);
+                Criterion destinationStopId1 = Property.forName(destinationStopIdProperty).eq(RAILWAY_STATION_STOP_ID_1);
+                Criterion destinationStopId2 = Property.forName(destinationStopIdProperty).eq(RAILWAY_STATION_STOP_ID_2);
 
                 logicalOr.add(startStopId1);
                 logicalOr.add(startStopId2);
