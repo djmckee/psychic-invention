@@ -74,6 +74,7 @@ public class OperatorQueries {
         session.save(operator);
 
         return session;
+
     }
 
     public static ExampleQuery selectAll() {
@@ -91,7 +92,8 @@ public class OperatorQueries {
             @Override
             public Criteria getCriteria(Session session) {
                 Criteria criteria = session.createCriteria(Operator.class, "o");
-                criteria.addOrder(Order.asc("o.name"));
+                Order ascendingOrder = Order.asc("o.name");
+                criteria.addOrder(ascendingOrder);
                 return criteria;
             }
         };
@@ -116,7 +118,8 @@ public class OperatorQueries {
 
                 // I looked up the use of createAlias at https://stackoverflow.com/questions/6744941/hibernate-criteria-with-many-to-many-join-table
                 criteria.createAlias("r.operators", "o");
-                criteria.add(Restrictions.eq("o.name", "Diamond Buses"));
+                SimpleExpression nameEqualsConstraint = Restrictions.eq("o.name", "Diamond Buses");
+                criteria.add(nameEqualsConstraint);
 
 
                 return criteria;
