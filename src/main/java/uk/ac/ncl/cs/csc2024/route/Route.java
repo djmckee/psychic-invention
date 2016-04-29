@@ -39,9 +39,9 @@ import java.util.Set;
  */
 @Entity
 @NamedQueries({
-        @NamedQuery(name = Route.SELECT_ALL, query = "select r from Route r order by r.number asc"),
-        @NamedQuery(name = Route.SELECT_ALL_FOR_RAILWAY_STATION, query = "select distinct r from Route r where r.startStop.id =  9015 OR r.startStop.id = 9016 OR r.destinationStop.id = 9015 OR r.destinationStop.id = 9016"),
-        @NamedQuery(name = Route.CUMULATIVE_FREQUENCY_BY_OK_TRAVEL, query = "select sum(r.frequency * 0.75) from Route r join r.operators o where o.name = 'OK Travel'")
+        @NamedQuery(name = Route.SELECT_ALL, query = Route.SELECT_ALL_HQL_QUERY),
+        @NamedQuery(name = Route.SELECT_ALL_FOR_RAILWAY_STATION, query = Route.SELECT_ALL_RAILWAY_STATION_ROUTES_HQL_QUERY),
+        @NamedQuery(name = Route.CUMULATIVE_FREQUENCY_BY_OK_TRAVEL, query = Route.SELECT_CUMULATIVE_FREQUENCY_FOR_OK_TRAVEL_HQL_QUERY)
 })
 
 @Table(name = "route")
@@ -49,6 +49,9 @@ public class Route {
     public static final String SELECT_ALL = "Route.selectAll";
     public static final String SELECT_ALL_FOR_RAILWAY_STATION = "Route.selectAllForRailwayStation";
     public static final String CUMULATIVE_FREQUENCY_BY_OK_TRAVEL = "Route.cumulativeFrequencyByOkTravel";
+    public static final String SELECT_ALL_HQL_QUERY = "select r from Route r order by r.number asc";
+    public static final String SELECT_ALL_RAILWAY_STATION_ROUTES_HQL_QUERY = "select distinct r from Route r where r.startStop.id =  9015 OR r.startStop.id = 9016 OR r.destinationStop.id = 9015 OR r.destinationStop.id = 9016";
+    public static final String SELECT_CUMULATIVE_FREQUENCY_FOR_OK_TRAVEL_HQL_QUERY = "select sum(r.frequency * 0.75) from Route r join r.operators o where o.name = 'OK Travel'";
 
     @Id
     @Column(name = "number")

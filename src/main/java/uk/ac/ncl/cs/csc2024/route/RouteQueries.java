@@ -126,7 +126,7 @@ public class RouteQueries {
         return new ExampleQuery() {
             @Override
             public Query getQuery(Session session) {
-                return session.createQuery("select r from Route r order by r.number asc");
+                return session.createQuery(Route.SELECT_ALL_HQL_QUERY);
             }
 
             @Override
@@ -149,7 +149,7 @@ public class RouteQueries {
         return new ExampleQuery() {
             @Override
             public Query getQuery(Session session) {
-                return session.createQuery("select distinct r from Route r where r.startStop.id =  9015 OR r.startStop.id = 9016 OR r.destinationStop.id = 9015 OR r.destinationStop.id = 9016");
+                return session.createQuery(Route.SELECT_ALL_RAILWAY_STATION_ROUTES_HQL_QUERY);
 
             }
 
@@ -190,7 +190,7 @@ public class RouteQueries {
         return new ExampleQuery() {
             @Override
             public Query getQuery(Session session) {
-                return session.createQuery("select sum(r.frequency * 0.75) from Route r join r.operators o where o.name = 'OK Travel'");
+                return session.createQuery(Route.SELECT_CUMULATIVE_FREQUENCY_FOR_OK_TRAVEL_HQL_QUERY);
 
             }
 
