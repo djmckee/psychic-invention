@@ -53,12 +53,23 @@ public class OperatorQueries {
         Operator operator = new Operator();
 
         // Operator fields are all String types so no need to perform any parsing.
-        operator.setName(row.get("name"));
-        operator.setStreet(row.get("street"));
-        operator.setTown(row.get("town"));
-        operator.setPostcode(row.get("postcode"));
-        operator.setEmail(row.get("email"));
-        operator.setPhone(row.get("phone"));
+        String name = row.get("name");
+        operator.setName(name);
+
+        String street = row.get("street");
+        operator.setStreet(street);
+
+        String town = row.get("town");
+        operator.setTown(town);
+
+        String postcode = row.get("postcode");
+        operator.setPostcode(postcode);
+
+        String email = row.get("email");
+        operator.setEmail(email);
+
+        String phone = row.get("phone");
+        operator.setPhone(phone);
 
         session.save(operator);
 
