@@ -23,6 +23,8 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.*;
+import org.hibernate.type.DoubleType;
+import org.hibernate.type.Type;
 import uk.ac.ncl.cs.csc2024.busstop.BusStop;
 import uk.ac.ncl.cs.csc2024.operator.Operator;
 import uk.ac.ncl.cs.csc2024.query.ExampleQuery;
@@ -184,8 +186,8 @@ public class RouteQueries {
                 // The name of one of the operators must equal OK Travel to be selected by this query...
                 criteria.add(Restrictions.eq("o.name", OK_TRAVEL_NAME));
 
-                // Add up the frequency of each OK Travel route to get cumulative frequency...
-                criteria.setProjection(Projections.sum("frequencyPerOperator"));
+                // Cumulative frequency for a given route is the total frequency divided by the number of operators...
+                criteria.setProjection(Projections.sqlProjection("SUM(frequency / (select count(*) from operator_route where route_id=number)) as operator_frequency", new String[]{"operator_frequency"}, new Type[]{DoubleType.INSTANCE}));
 
                 return criteria;
             }
