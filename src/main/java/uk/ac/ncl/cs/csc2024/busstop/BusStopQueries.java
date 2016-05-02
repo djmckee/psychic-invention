@@ -57,9 +57,11 @@ public class BusStopQueries {
         int busStopId = Integer.parseInt(idString);
         busStop.setId(busStopId);
 
+        // Set description (description is already a String type so no parsing/typecasting is necessary)
         String description = row.get("description");
         busStop.setDescription(description);
 
+        // Persist Bus Stop to database
         session.save(busStop);
 
         return session;
@@ -103,10 +105,13 @@ public class BusStopQueries {
             public Criteria getCriteria(Session session) {
                 Criteria criteria = session.createCriteria(BusStop.class, "b");
 
-                criteria.setMaxResults(1);
-
+                // Selecting the maximum by sorting the results in descending order by ID number,
+                // and then limiting the results set size to 1 - meaning that the results set contains
+                // only 1 bus stop - the one with the maximum ID.
                 Order descendingOrder = Order.desc("id");
                 criteria.addOrder(descendingOrder);
+
+                criteria.setMaxResults(1);
 
                 return criteria;
             }
