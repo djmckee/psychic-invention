@@ -19,7 +19,6 @@
  */
 package uk.ac.ncl.cs.csc2024.route;
 
-import org.hibernate.annotations.Formula;
 import uk.ac.ncl.cs.csc2024.busstop.BusStop;
 import uk.ac.ncl.cs.csc2024.operator.Operator;
 
@@ -126,14 +125,6 @@ public class Route {
     private Set<Operator> operators = new HashSet<Operator>();
 
     /**
-     * A computed property that contains the frequency per hour to be operated by each operator for the current route,
-     * based off of the frequency of the route and the number of operators.
-     */
-    // TODO: fix
-    @Formula("frequency / 1.25")
-    private double frequencyPerOperator;
-
-    /**
      * Returns the route number for the current Route instance.
      * @return the number of the current Route.
      */
@@ -214,14 +205,6 @@ public class Route {
     }
 
     /**
-     * Returns the frequency per operator for this route.
-     * @return the frequency per operator for this route.
-     */
-    public double getFrequencyPerOperator() {
-        return frequencyPerOperator;
-    }
-
-    /**
      * A human readable representation of the Route class.
      * @return a String describing this Route instance.
      */
@@ -233,7 +216,6 @@ public class Route {
                 ", startStop=" + startStop +
                 ", destinationStop=" + destinationStop +
                 ", operators=" + operators +
-                ", frequencyPerOperator=" + frequencyPerOperator +
                 '}';
     }
 

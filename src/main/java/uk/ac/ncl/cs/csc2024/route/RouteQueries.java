@@ -50,6 +50,9 @@ import java.util.Set;
  */
 public class RouteQueries {
 
+    /**
+     * Railway station stop 1
+     */
     private static final int RAILWAY_STATION_STOP_ID_1 = 9015;
     private static final int RAILWAY_STATION_STOP_ID_2 = 9016;
     private static final String OK_TRAVEL_NAME = "OK Travel";
