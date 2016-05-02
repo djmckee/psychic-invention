@@ -19,10 +19,7 @@
  */
 package uk.ac.ncl.cs.csc2024.busstop;
 
-import uk.ac.ncl.cs.csc2024.route.Route;
-
 import javax.persistence.*;
-import java.util.Set;
 
 /**
  * Hibernate BusStop Entity
@@ -37,7 +34,7 @@ import java.util.Set;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(name = BusStop.SELECT_ALL, query = BusStop.SELCT_ALL_HQL_QUERY),
+        @NamedQuery(name = BusStop.SELECT_ALL, query = BusStop.SELECT_ALL_HQL_QUERY),
         @NamedQuery(name = BusStop.SELECT_MAX_ID, query = BusStop.SELECT_MAX_ID_HQL_QUERY)
 
 })
@@ -63,7 +60,7 @@ public class BusStop {
     /**
      * The HQL query to select the bus stop with the maximum ID.
      */
-    public static final String SELCT_ALL_HQL_QUERY = "select b from BusStop b order by b.id asc";
+    public static final String SELECT_ALL_HQL_QUERY = "select b from BusStop b order by b.id asc";
 
     /**
      * The primary key for the BusStop entirety.

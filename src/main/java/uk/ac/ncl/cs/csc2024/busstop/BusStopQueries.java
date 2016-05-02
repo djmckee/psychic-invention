@@ -22,9 +22,7 @@ package uk.ac.ncl.cs.csc2024.busstop;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Query;
-import org.hibernate.Transaction;
 import org.hibernate.criterion.*;
-import org.hibernate.type.IntegerType;
 import uk.ac.ncl.cs.csc2024.query.ExampleQuery;
 
 import java.util.Map;
@@ -71,7 +69,7 @@ public class BusStopQueries {
         return new ExampleQuery() {
             @Override
             public Query getQuery(Session session) {
-                return session.createQuery(BusStop.SELCT_ALL_HQL_QUERY);
+                return session.createQuery(BusStop.SELECT_ALL_HQL_QUERY);
             }
 
             @Override
