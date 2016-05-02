@@ -46,6 +46,7 @@ import java.util.Map;
  * An example of how this should look is provided in the `selectAll(...)` query.
  *
  * @author hugofirth
+ * @author Modified by Dylan McKee
  */
 public class OperatorQueries {
 

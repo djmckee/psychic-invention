@@ -23,15 +23,11 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Query;
 import org.hibernate.criterion.*;
-import org.hibernate.sql.JoinType;
-import org.hibernate.type.IntegerType;
-import org.hibernate.type.Type;
 import uk.ac.ncl.cs.csc2024.busstop.BusStop;
 import uk.ac.ncl.cs.csc2024.operator.Operator;
 import uk.ac.ncl.cs.csc2024.query.ExampleQuery;
 import uk.ac.ncl.cs.csc2024.query.QueryUtilities;
 
-import java.sql.PreparedStatement;
 import java.util.*;
 
 /**
@@ -47,6 +43,7 @@ import java.util.*;
  * An example of how this should look is provided in the `selectAll(...)` query.
  *
  * @author hugofirth
+ * @author Modified by Dylan McKee
  */
 public class RouteQueries {
 
@@ -63,7 +60,7 @@ public class RouteQueries {
 
         String encodedOperatorStrings = row.get("operators");
 
-        Set<Operator> operators = parseOperatorsFromEncodedString(session, encodedOperatorStrings);
+        Set<Operator> operators = QueryUtilities.parseOperatorsFromEncodedString(session, encodedOperatorStrings);
 
         route.setOperators(operators);
 
@@ -95,31 +92,6 @@ public class RouteQueries {
 
         return session;
 
-    }
-
-    private static Set<Operator> parseOperatorsFromEncodedString(Session session, String encodedOperatorStrings) {
-        // A placeholder array to hold the route's potentially multiple operators in...
-        Set<Operator> operators = new HashSet<Operator>();
-
-        // Parse the '|' separated string of operators, if there's more than one...
-        if (encodedOperatorStrings.contains("|")) {
-            // Continue with parse by splitting on | char
-            String[] encodedNamesSplit = encodedOperatorStrings.split("\\|");
-
-            // Add them all to the list...
-            for (String operatorName : encodedNamesSplit) {
-                // Instantiate Operator from name; add to operators array
-                Operator operator = QueryUtilities.findOperatorByName(session, operatorName);
-                operators.add(operator);
-            }
-        } else {
-            // Single operator; no parse necessary - just add the 1 operator name to the array and continue
-            // Instantiate Operator from name; add to operators array
-            Operator operator = QueryUtilities.findOperatorByName(session, encodedOperatorStrings);
-            operators.add(operator);
-        }
-
-        return operators;
     }
 
     public static ExampleQuery selectAll() {

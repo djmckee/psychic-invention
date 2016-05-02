@@ -5,10 +5,14 @@ import org.hibernate.Session;
 import uk.ac.ncl.cs.csc2024.busstop.BusStop;
 import uk.ac.ncl.cs.csc2024.operator.Operator;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
- * Convenience methods to find operator by name and find a bus stop by ID number.
+ * Convenience methods to find operator by name and find a bus stop by ID number, and parse the | separated string of
+ * bus operator names into a Set of Operators.
+ *
  * I created this class to reduce code and logic duplication, and ensure that the
  * 'Queries' classes to not become cluttered with these accessor methods.
  *
@@ -84,6 +88,39 @@ public class QueryUtilities {
 
         // Something went wrong. Null pointer exception waiting to happen...
         return null;
+    }
+
+    /**
+     * A convenience method to parse a String of Operator names, separated by the '|' char., into a Set of the
+     * Operator instances that match those names.
+     *
+     * @param session the Hibernate session in which to conduct the relevant queries.
+     * @param encodedOperatorStrings the String to parse the Operator names from.
+     * @return a Set of Operator instances.
+     */
+    public static Set<Operator> parseOperatorsFromEncodedString(Session session, String encodedOperatorStrings) {
+        // A placeholder array to hold the route's potentially multiple operators in...
+        Set<Operator> operators = new HashSet<Operator>();
+
+        // Parse the '|' separated string of operators, if there's more than one...
+        if (encodedOperatorStrings.contains("|")) {
+            // Continue with parse by splitting on | char
+            String[] encodedNamesSplit = encodedOperatorStrings.split("\\|");
+
+            // Add them all to the list...
+            for (String operatorName : encodedNamesSplit) {
+                // Instantiate Operator from name; add to operators array
+                Operator operator = findOperatorByName(session, operatorName);
+                operators.add(operator);
+            }
+        } else {
+            // Single operator; no parse necessary - just add the 1 operator name to the array and continue
+            // Instantiate Operator from name; add to operators array
+            Operator operator = findOperatorByName(session, encodedOperatorStrings);
+            operators.add(operator);
+        }
+
+        return operators;
     }
 
 }
