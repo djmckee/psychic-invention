@@ -122,6 +122,8 @@ public class OperatorQueries {
 
                 // I looked up the use of createAlias at https://stackoverflow.com/questions/6744941/hibernate-criteria-with-many-to-many-join-table
                 criteria.createAlias("r.operators", "o");
+
+                // Name of one of the route operators must equal 'Diamond Buses'
                 SimpleExpression nameEqualsConstraint = Restrictions.eq("o.name", DIAMOND_BUSES_NAME);
                 criteria.add(nameEqualsConstraint);
 
