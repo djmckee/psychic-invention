@@ -139,4 +139,15 @@ public class BusStop {
         return getId();
     }
 
+    /**
+     * A human readable representation of the BusStop class.
+     * @return a String describing this BusStop instance.
+     */
+    @Override
+    public String toString() {
+        return "BusStop{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

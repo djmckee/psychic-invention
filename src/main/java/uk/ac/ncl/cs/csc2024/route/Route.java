@@ -197,4 +197,19 @@ public class Route {
         return frequencyPerOperator;
     }
 
+    /**
+     * A human readable representation of the Route class.
+     * @return a String describing this Route instance.
+     */
+    @Override
+    public String toString() {
+        return "Route{" +
+                "number='" + number + '\'' +
+                ", frequency=" + frequency +
+                ", startStop=" + startStop +
+                ", destinationStop=" + destinationStop +
+                ", operators=" + operators +
+                ", frequencyPerOperator=" + frequencyPerOperator +
+                '}';
+    }
 }

@@ -284,5 +284,21 @@ public class Operator {
         return getId();
     }
 
-
+    /**
+     * A human readable representation of the Operator class.
+     * @return a String describing this Operator instance.
+     */
+    @Override
+    public String toString() {
+        return "Operator{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", street='" + street + '\'' +
+                ", town='" + town + '\'' +
+                ", postcode='" + postcode + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", routes=" + routes +
+                '}';
+    }
 }
