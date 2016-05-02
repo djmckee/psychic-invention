@@ -45,34 +45,76 @@ import java.util.Set;
 @Table(name = "bus_stop")
 public class BusStop {
 
+    /**
+     * The name of the 'select all bus stops' query.
+     */
     public static final String SELECT_ALL = "BusStop.selectAll";
+
+    /**
+     * The name of the 'select bus stop with maximum ID' query
+     */
     public static final String SELECT_MAX_ID = "BusStop.selectMaxId";
+
+    /**
+     * The HQL query to select all bus stops.
+     */
     public static final String SELECT_MAX_ID_HQL_QUERY = "select b from BusStop b where b.id = (select max(id) from BusStop)";
+
+    /**
+     * The HQL query to select the bus stop with the maximum ID.
+     */
     public static final String SELCT_ALL_HQL_QUERY = "select b from BusStop b order by b.id asc";
 
+    /**
+     * The primary key for the BusStop entirety.
+     */
     @Id
     @Column(name = "id")
     private int id;
 
+    /**
+     * The bus stop description.
+     */
     @Column(name = "description")
     private String description;
 
+    /**
+     * Returns the id of this bus stop
+     * @return the id of this bus stop.
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Sets the id of this bus stop instance.
+     * @param id the id of this bus stop instance.
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     * Returns a string description of this bus stop.
+     * @return the description of this bus stop instance.
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Sets the description of this bus stop.
+     * @param description the new description of this bus stop instance.
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /**
+     * Returns true of object O is equal to this Bus Stop instance.
+     * @param o the object to compare this Bus Stop to.
+     * @return true iff 'o' is logically equal to this Bus Stop instance.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -88,6 +130,10 @@ public class BusStop {
 
     }
 
+    /**
+     * A hash value representing the unique fields of this Bus Stop instance.
+     * @return in integer representing this Bus Stop uniquely.
+     */
     @Override
     public int hashCode() {
         return getId();
