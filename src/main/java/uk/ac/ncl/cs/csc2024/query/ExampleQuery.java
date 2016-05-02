@@ -34,4 +34,5 @@ public interface ExampleQuery {
     String getNamedQueryName();
     Criteria getCriteria(Session session);
 
+
 }

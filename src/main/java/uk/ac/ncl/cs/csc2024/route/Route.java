@@ -212,4 +212,5 @@ public class Route {
                 ", frequencyPerOperator=" + frequencyPerOperator +
                 '}';
     }
+
 }

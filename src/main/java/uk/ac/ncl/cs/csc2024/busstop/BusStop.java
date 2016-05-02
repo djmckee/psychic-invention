@@ -147,4 +147,5 @@ public class BusStop {
                 ", description='" + description + '\'' +
                 '}';
     }
+
 }
