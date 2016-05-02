@@ -136,11 +136,13 @@ public class RouteQueries {
                 Order ascendingOrder = Order.asc("r.number");
                 criteria.addOrder(ascendingOrder);
 
+                // Using the disjunction operation to perform a logical OR...
                 Disjunction logicalOr = Restrictions.disjunction();
 
                 final String startStopIdProperty = "r.startStop.id";
                 final String destinationStopIdProperty = "r.destinationStop.id";
 
+                // The start stop OR destination stop ID must equal one of the two Railway Station stop IDs to be selected by this query.
                 Criterion startStopId1 = Property.forName(startStopIdProperty).eq(RAILWAY_STATION_STOP_ID_1);
                 Criterion startStopId2 = Property.forName(startStopIdProperty).eq(RAILWAY_STATION_STOP_ID_2);
                 Criterion destinationStopId1 = Property.forName(destinationStopIdProperty).eq(RAILWAY_STATION_STOP_ID_1);
@@ -177,9 +179,11 @@ public class RouteQueries {
 
                 // I looked up the use of createAlias at https://stackoverflow.com/questions/6744941/hibernate-criteria-with-many-to-many-join-table
                 criteria.createAlias("r.operators", "o");
+
+                // The name of one of the operators must equal OK Travel to be selected by this query...
                 criteria.add(Restrictions.eq("o.name", OK_TRAVEL_NAME));
 
-
+                // Add up the frequency of each OK Travel route to get cumulative frequency...
                 criteria.setProjection(Projections.sum("frequencyPerOperator"));
 
                 return criteria;
