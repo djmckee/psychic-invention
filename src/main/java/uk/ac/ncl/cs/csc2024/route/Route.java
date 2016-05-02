@@ -53,79 +53,146 @@ public class Route {
     public static final String SELECT_ALL_RAILWAY_STATION_ROUTES_HQL_QUERY = "select distinct r from Route r where r.startStop.id =  9015 OR r.startStop.id = 9016 OR r.destinationStop.id = 9015 OR r.destinationStop.id = 9016";
     public static final String SELECT_CUMULATIVE_FREQUENCY_FOR_OK_TRAVEL_HQL_QUERY = "select sum(r.frequency * 0.75) from Route r join r.operators o where o.name = 'OK Travel'";
 
+    /**
+     * The primary key for the Route entirety.
+     *
+     * Using a String type for a variable called 'number' seems extremely counter-intuitive, but the fact that
+     * '16A' is in the sample data set as a 'route number' leaves me with no choice.
+     *
+     */
     @Id
     @Column(name = "number")
     // Using a String type for a variable called 'number' seems extremely counter-intuitive, but the fact that
     // '16A' is in the sample data set as a 'route number' leaves me with no choice. Ugh. :-(
     private String number;
 
+    /**
+     * The frequency per hour for the given route.
+     */
     @Column(name = "frequency")
     private int frequency;
 
 
+    /**
+     * The BusStop that this Route starts at.
+     */
     @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "start_stop_id")
     private BusStop startStop;
 
+    /**
+     * The destination BusStop for this Route.
+     */
     @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "destination_stop_id")
     private BusStop destinationStop;
 
+    /**
+     * A Set of Operators for the current Route.
+     */
     @ManyToMany(
-            targetEntity=Operator.class,
-            cascade={CascadeType.REMOVE, CascadeType.REMOVE}
+            targetEntity = Operator.class,
+            cascade = {CascadeType.REMOVE, CascadeType.REMOVE}
     )
     @JoinTable(
-            name="operator_route",
-            joinColumns=@JoinColumn(name="route_id"),
-            inverseJoinColumns=@JoinColumn(name="operator_id")
+            name = "operator_route",
+            joinColumns = @JoinColumn(name = "route_id"),
+            inverseJoinColumns = @JoinColumn(name = "operator_id")
     )
     private Set<Operator> operators = new HashSet<Operator>();
 
+    /**
+     * A computed property that contains the frequency per hour to be operated by each operator for the current route,
+     * based off of the frequency of the route and the number of operators.
+     */
     // TODO: fix
     @Formula("frequency * 0.75")
     private double frequencyPerOperator;
 
+    /**
+     * Returns the route number for the current Route instance.
+     * @return the number of the current Route.
+     */
     public String getNumber() {
         return number;
     }
 
+    /**
+     * Sets the number for the current route instance.
+     * @param routeNumber a String containing the route number.
+     */
     public void setNumber(String routeNumber) {
-        this.number = routeNumber;
+        number = routeNumber;
     }
 
+    /**
+     * Returns the frequency for the current route.
+     * @return the frequency of the current route.
+     */
     public int getFrequency() {
         return frequency;
     }
 
+    /**
+     * Sets the frequency (i.e. the number of times operated per hour) for this Route.
+     * @param frequency the frequency for this Route.
+     */
     public void setFrequency(int frequency) {
         this.frequency = frequency;
     }
 
+    /**
+     * Returns the starting BusStop for this Route.
+     * @return the BusStop that this route starts at.
+     */
     public BusStop getStartStop() {
         return startStop;
     }
 
+    /**
+     * Sets the BusStop that this Route ends at.
+     * @param startStop the BusStop that this route finishes at.
+     */
     public void setStartStop(BusStop startStop) {
         this.startStop = startStop;
     }
 
+    /**
+     * Returns the destination BusStop for this Route.
+     * @return the BusStop that this route ends at.
+     */
     public BusStop getDestinationStop() {
         return destinationStop;
     }
 
+    /**
+     * Sets the BusStop that this Route ends at.
+     * @param destinationStop the BusStop that this route finishes at.
+     */
     public void setDestinationStop(BusStop destinationStop) {
         this.destinationStop = destinationStop;
     }
 
+    /**
+     * Returns a Set containing the Operators that operate this Route.
+     * @return a Set containing the Operators that operate this Route.
+     */
     public Set<Operator> getOperators() {
         return operators;
     }
 
+    /**
+     * Sets the operators that operate this route.
+     * @param operators a set containing the operators that operate this route.
+     */
     public void setOperators(Set<Operator> operators) {
         this.operators = operators;
     }
 
+    /**
+     * Returns the frequency per operator for this route.
+     * @return the frequency per operator for this route.
+     */
     public double getFrequencyPerOperator() {
         return frequencyPerOperator;
     }
