@@ -46,11 +46,35 @@ import java.util.Set;
 
 @Table(name = "route")
 public class Route {
+
+    /**
+     * The name of the 'select all routes' query.
+     */
     public static final String SELECT_ALL = "Route.selectAll";
+
+    /**
+     * The name of the select all routes that go via the Railway Station query.
+     */
     public static final String SELECT_ALL_FOR_RAILWAY_STATION = "Route.selectAllForRailwayStation";
+
+    /**
+     * The name of the select cumulative frequency by OK Travel query.
+     */
     public static final String CUMULATIVE_FREQUENCY_BY_OK_TRAVEL = "Route.cumulativeFrequencyByOkTravel";
+
+    /**
+     * The HQL Query the 'select all routes' query.
+     */
     public static final String SELECT_ALL_HQL_QUERY = "select r from Route r order by r.number asc";
+
+    /**
+     * The HQL Query for the select all routes that go via the Railway Station query.
+     */
     public static final String SELECT_ALL_RAILWAY_STATION_ROUTES_HQL_QUERY = "select distinct r from Route r where r.startStop.id =  9015 OR r.startStop.id = 9016 OR r.destinationStop.id = 9015 OR r.destinationStop.id = 9016";
+
+    /**
+     * The HQL Query for the select cumulative frequency by OK Travel query.
+     */
     public static final String SELECT_CUMULATIVE_FREQUENCY_FOR_OK_TRAVEL_HQL_QUERY = "select sum(r.frequency * 0.75) from Route r join r.operators o where o.name = 'OK Travel'";
 
     /**
