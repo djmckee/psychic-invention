@@ -20,15 +20,13 @@
 package uk.ac.ncl.cs.csc2024.operator;
 
 import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
-import org.hibernate.Session;
 import org.hibernate.Query;
-
-import org.hibernate.criterion.*;
-import org.hibernate.sql.JoinType;
-import uk.ac.ncl.cs.csc2024.busstop.BusStop;
+import org.hibernate.Session;
+import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.SimpleExpression;
 import uk.ac.ncl.cs.csc2024.query.ExampleQuery;
-import uk.ac.ncl.cs.csc2024.query.QueryUtilities;
 import uk.ac.ncl.cs.csc2024.route.Route;
 
 import java.util.Map;

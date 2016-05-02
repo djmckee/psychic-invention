@@ -20,15 +20,16 @@
 package uk.ac.ncl.cs.csc2024.route;
 
 import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.criterion.*;
 import uk.ac.ncl.cs.csc2024.busstop.BusStop;
 import uk.ac.ncl.cs.csc2024.operator.Operator;
 import uk.ac.ncl.cs.csc2024.query.ExampleQuery;
 import uk.ac.ncl.cs.csc2024.query.QueryUtilities;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Collection of Queries relating to Route entities

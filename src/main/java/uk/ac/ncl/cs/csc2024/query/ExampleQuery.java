@@ -20,8 +20,8 @@
 package uk.ac.ncl.cs.csc2024.query;
 
 import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.hibernate.Query;
+import org.hibernate.Session;
 
 /**
  * The interface which each object returned from a task method should implement.

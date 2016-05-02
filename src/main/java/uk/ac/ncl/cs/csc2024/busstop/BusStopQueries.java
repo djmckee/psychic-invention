@@ -20,9 +20,9 @@
 package uk.ac.ncl.cs.csc2024.busstop;
 
 import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.hibernate.Query;
-import org.hibernate.criterion.*;
+import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import uk.ac.ncl.cs.csc2024.query.ExampleQuery;
 
 import java.util.Map;
