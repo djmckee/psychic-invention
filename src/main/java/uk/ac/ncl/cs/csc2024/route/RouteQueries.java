@@ -51,7 +51,7 @@ public class RouteQueries {
     private static final int RAILWAY_STATION_STOP_ID_2 = 9016;
     private static final String OK_TRAVEL_NAME = "OK Travel";
 
-    public static Session insert(final Map<String, String> row, final Session session) {
+    public static Session insert(Map<String, String> row, Session session) {
         Route route = new Route();
 
         // Weirdly enough, route 'number' is actually a string :-/, so don't bother parsing it.
@@ -139,8 +139,8 @@ public class RouteQueries {
                 // Using the disjunction operation to perform a logical OR...
                 Disjunction logicalOr = Restrictions.disjunction();
 
-                final String startStopIdProperty = "r.startStop.id";
-                final String destinationStopIdProperty = "r.destinationStop.id";
+                String startStopIdProperty = "r.startStop.id";
+                String destinationStopIdProperty = "r.destinationStop.id";
 
                 // The start stop OR destination stop ID must equal one of the two Railway Station stop IDs to be selected by this query.
                 Criterion startStopId1 = Property.forName(startStopIdProperty).eq(RAILWAY_STATION_STOP_ID_1);

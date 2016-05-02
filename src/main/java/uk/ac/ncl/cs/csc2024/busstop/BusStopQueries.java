@@ -47,7 +47,7 @@ import java.util.Map;
  */
 public class BusStopQueries {
 
-    public static Session insert(final Map<String, String> row, final Session session) {
+    public static Session insert(Map<String, String> row, Session session) {
 
         // Create our new bus stop instance
         BusStop busStop = new BusStop();

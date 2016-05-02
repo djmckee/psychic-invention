@@ -53,7 +53,7 @@ public class OperatorQueries {
     private static final String PARK_GATES_DESCRIPTION = "Park Gates";
     private static final String DIAMOND_BUSES_NAME = "Diamond Buses";
 
-    public static Session insert(final Map<String, String> row, Session session) {
+    public static Session insert(Map<String, String> row, Session session) {
         Operator operator = new Operator();
 
         // Operator fields are all String types so no need to perform any parsing.
