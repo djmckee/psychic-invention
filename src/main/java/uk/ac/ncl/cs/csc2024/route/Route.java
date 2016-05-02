@@ -75,7 +75,7 @@ public class Route {
     /**
      * The HQL Query for the select cumulative frequency by OK Travel query.
      */
-    public static final String SELECT_CUMULATIVE_FREQUENCY_FOR_OK_TRAVEL_HQL_QUERY = "select sum(r.frequency * 0.75) from Route r join r.operators o where o.name = 'OK Travel'";
+    public static final String SELECT_CUMULATIVE_FREQUENCY_FOR_OK_TRAVEL_HQL_QUERY = "select sum(r.frequency / r.operators.size) from Route r join r.operators o where o.name = 'OK Travel'";
 
     /**
      * The primary key for the Route entirety.
@@ -130,7 +130,7 @@ public class Route {
      * based off of the frequency of the route and the number of operators.
      */
     // TODO: fix
-    @Formula("frequency * 0.75")
+    @Formula("frequency / 1.25")
     private double frequencyPerOperator;
 
     /**
