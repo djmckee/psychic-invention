@@ -48,7 +48,14 @@ import java.util.Map;
  */
 public class OperatorQueries {
 
+    /**
+     * The description of the Park Gates bus stop, for use in the queries.
+     */
     private static final String PARK_GATES_DESCRIPTION = "Park Gates";
+
+    /**
+     * The name of the Diamond Buses operator, for use in the queries.
+     */
     private static final String DIAMOND_BUSES_NAME = "Diamond Buses";
 
     public static Session insert(Map<String, String> row, Session session) {

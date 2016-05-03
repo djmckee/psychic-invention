@@ -51,10 +51,18 @@ import java.util.Set;
 public class RouteQueries {
 
     /**
-     * Railway station stop 1
+     * Railway station stop 1 ID number.
      */
     private static final int RAILWAY_STATION_STOP_ID_1 = 9015;
+
+    /**
+     * Railway station stop 2 ID number.
+     */
     private static final int RAILWAY_STATION_STOP_ID_2 = 9016;
+
+    /**
+     * The name of 'OK Travel' for use in the queries.
+     */
     private static final String OK_TRAVEL_NAME = "OK Travel";
 
     public static Session insert(Map<String, String> row, Session session) {
@@ -66,22 +74,28 @@ public class RouteQueries {
 
         String encodedOperatorStrings = row.get("operators");
 
+        // Parse operators from the encoded string of operator names...
         Set<Operator> operators = QueryUtilities.parseOperatorsFromEncodedString(session, encodedOperatorStrings);
 
         route.setOperators(operators);
 
         // Parse integers from the Map...
+
+        // Parse frequency from String to integer...
         String frequencyString = row.get("frequency");
         int frequency = Integer.parseInt(frequencyString);
+        // Set frequency to the parsed integer...
+        route.setFrequency(frequency);
 
+        // Parse start stop ID number from string to integer to perform lookup.
         String startStopIdNumberString = row.get("start");
         int startStopId = Integer.parseInt(startStopIdNumberString);
 
 
+        // Parse destination stop ID from String to integer to perform lookup.
         String destinationStopIdNumberString = row.get("destination");
         int destinationStopId = Integer.parseInt(destinationStopIdNumberString);
 
-        route.setFrequency(frequency);
 
 
         // Now instantiate stops from stop ID numbers and attach them to the route...
@@ -94,6 +108,7 @@ public class RouteQueries {
         BusStop destinationStop = QueryUtilities.findBusStopWithID(session, destinationStopId);
         route.setDestinationStop(destinationStop);
 
+        // Save the new route to insert it...
         session.save(route);
 
         return session;
