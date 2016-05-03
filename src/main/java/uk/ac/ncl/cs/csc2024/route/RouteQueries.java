@@ -60,6 +60,12 @@ public class RouteQueries {
      */
     private static final String RAILWAY_STATION_STOP_DESCRIPTION = "Railway Station";
 
+    /**
+     * The SQL query to calculate the cumulative frequency per operator for a given route;
+     * used in the 'cumulativeFrequencyByOkTravel' method.
+     */
+    private static final String CALCULATE_CUMULATIVE_OPERATOR_FREQUENCY_SQL_QUERY = "SUM(frequency / (select count(*) from operator_route where route_id=number)) as operator_frequency";
+
     public static Session insert(Map<String, String> row, Session session) {
         Route route = new Route();
 
@@ -197,7 +203,7 @@ public class RouteQueries {
                 criteria.add(Restrictions.eq("o.name", OK_TRAVEL_NAME));
 
                 // Cumulative frequency for a given route is the total frequency divided by the number of operators...
-                criteria.setProjection(Projections.sqlProjection("SUM(frequency / (select count(*) from operator_route where route_id=number)) as operator_frequency", new String[]{"operator_frequency"}, new Type[]{DoubleType.INSTANCE}));
+                criteria.setProjection(Projections.sqlProjection(CALCULATE_CUMULATIVE_OPERATOR_FREQUENCY_SQL_QUERY, new String[]{"operator_frequency"}, new Type[]{DoubleType.INSTANCE}));
 
                 return criteria;
             }
