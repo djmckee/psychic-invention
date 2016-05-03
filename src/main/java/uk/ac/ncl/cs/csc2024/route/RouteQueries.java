@@ -55,6 +55,11 @@ public class RouteQueries {
      */
     private static final String OK_TRAVEL_NAME = "OK Travel";
 
+    /**
+     * The description of the 'Railway Station' stops for use in the queries.
+     */
+    private static final String RAILWAY_STATION_STOP_DESCRIPTION = "Railway Station";
+
     public static Session insert(Map<String, String> row, Session session) {
         Route route = new Route();
 
@@ -155,8 +160,8 @@ public class RouteQueries {
                 criteria.createAlias("r.destinationStop", "dStop");
 
                 // The start stop OR destination stop description must equal 'Railway Station' for this query.
-                Criterion startStopDescription = Property.forName("sStop.description").eq("Railway Station");
-                Criterion destinationStopDescription = Property.forName("dStop.description").eq("Railway Station");
+                Criterion startStopDescription = Property.forName("sStop.description").eq(RAILWAY_STATION_STOP_DESCRIPTION);
+                Criterion destinationStopDescription = Property.forName("dStop.description").eq(RAILWAY_STATION_STOP_DESCRIPTION);
 
                 logicalOr.add(startStopDescription);
                 logicalOr.add(destinationStopDescription);
