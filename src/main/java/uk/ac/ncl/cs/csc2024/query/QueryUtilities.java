@@ -6,7 +6,6 @@ import uk.ac.ncl.cs.csc2024.busstop.BusStop;
 import uk.ac.ncl.cs.csc2024.operator.Operator;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -46,20 +45,7 @@ public class QueryUtilities {
         Query operatorQuery = session.createQuery(FIND_OPERATOR_BY_NAME_HQL_QUERY);
         operatorQuery.setString("name", name);
 
-        List<Operator> operatorResults = (List<Operator>) operatorQuery.list();
-
-        // There should only be 1 match with that name...
-        for (Operator operator : operatorResults) {
-            // Sanity check
-            if (operator.getName().equals(name)) {
-                // It's definitely the desired operator because the name matches - return it.
-                return operator;
-
-            }
-        }
-
-        // Something went wrong. Null pointer exception waiting to happen...
-        return null;
+        return (Operator) operatorQuery.uniqueResult();
 
     }
 
@@ -71,23 +57,10 @@ public class QueryUtilities {
      * @return the Bus Stop instance that matches the ID being searched for, if one exists. Otherwise null.
      */
     public static BusStop findBusStopWithID(Session session, int id) {
-        Query sessionQuery = session.createQuery(FIND_BUS_STOP_BY_ID_HQL_QUERY);
-        sessionQuery.setInteger("id", id);
+        Query busStopIdQuery = session.createQuery(FIND_BUS_STOP_BY_ID_HQL_QUERY);
+        busStopIdQuery.setInteger("id", id);
 
-        List<BusStop> stops= (List<BusStop>) sessionQuery.list();
-
-        // There should only be 1 match with that ID...
-        for (BusStop stop : stops) {
-            // Sanity check
-            if (stop.getId() == id) {
-                // It's definitely the desired stop because the IDs match...
-                // We've found a match; return it and terminate the loop.
-                return stop;
-            }
-        }
-
-        // Something went wrong. Null pointer exception waiting to happen...
-        return null;
+        return (BusStop) busStopIdQuery.uniqueResult();
     }
 
     /**
