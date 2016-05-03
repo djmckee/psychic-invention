@@ -51,16 +51,6 @@ import java.util.Set;
 public class RouteQueries {
 
     /**
-     * Railway station stop 1 ID number.
-     */
-    private static final int RAILWAY_STATION_STOP_ID_1 = 9015;
-
-    /**
-     * Railway station stop 2 ID number.
-     */
-    private static final int RAILWAY_STATION_STOP_ID_2 = 9016;
-
-    /**
      * The name of 'OK Travel' for use in the queries.
      */
     private static final String OK_TRAVEL_NAME = "OK Travel";
@@ -160,19 +150,16 @@ public class RouteQueries {
                 // Using the disjunction operation to perform a logical OR...
                 Disjunction logicalOr = Restrictions.disjunction();
 
-                String startStopIdProperty = "r.startStop.id";
-                String destinationStopIdProperty = "r.destinationStop.id";
+                // Create aliases for the start stop and destination stop so that their descriptions can be queried
+                criteria.createAlias("r.startStop", "sStop");
+                criteria.createAlias("r.destinationStop", "dStop");
 
-                // The start stop OR destination stop ID must equal one of the two Railway Station stop IDs to be selected by this query.
-                Criterion startStopId1 = Property.forName(startStopIdProperty).eq(RAILWAY_STATION_STOP_ID_1);
-                Criterion startStopId2 = Property.forName(startStopIdProperty).eq(RAILWAY_STATION_STOP_ID_2);
-                Criterion destinationStopId1 = Property.forName(destinationStopIdProperty).eq(RAILWAY_STATION_STOP_ID_1);
-                Criterion destinationStopId2 = Property.forName(destinationStopIdProperty).eq(RAILWAY_STATION_STOP_ID_2);
+                // The start stop OR destination stop description must equal 'Railway Station' for this query.
+                Criterion startStopDescription = Property.forName("sStop.description").eq("Railway Station");
+                Criterion destinationStopDescription = Property.forName("dStop.description").eq("Railway Station");
 
-                logicalOr.add(startStopId1);
-                logicalOr.add(startStopId2);
-                logicalOr.add(destinationStopId1);
-                logicalOr.add(destinationStopId2);
+                logicalOr.add(startStopDescription);
+                logicalOr.add(destinationStopDescription);
 
                 criteria.add(logicalOr);
 
