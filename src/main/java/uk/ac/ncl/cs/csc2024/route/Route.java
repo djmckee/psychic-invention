@@ -69,7 +69,7 @@ public class Route {
     /**
      * The HQL Query for the select all routes that go via the Railway Station query.
      */
-    public static final String SELECT_ALL_RAILWAY_STATION_ROUTES_HQL_QUERY = "select distinct r from Route r where r.startStop.id =  9015 OR r.startStop.id = 9016 OR r.destinationStop.id = 9015 OR r.destinationStop.id = 9016";
+    public static final String SELECT_ALL_RAILWAY_STATION_ROUTES_HQL_QUERY = "select distinct r from Route r where r.startStop.description =  'Railway Station' OR r.destinationStop.description = 'Railway Station'";
 
     /**
      * The HQL Query for the select cumulative frequency by OK Travel query.
